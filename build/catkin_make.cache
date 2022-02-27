@@ -1,0 +1,2 @@
+humanoid_bringup:humanoid_examples:humanoid_footbal_core:humanoid_hardware:humanoid_inv_kinematics:humanoid_msgs:humanoid_particle_filter:humanoid_vision
+-DCATKIN_DEVEL_PREFIX=/home/drozdzal/melson_ws/devel -DCMAKE_INSTALL_PREFIX=/home/drozdzal/melson_ws/install -G Unix Makefiles

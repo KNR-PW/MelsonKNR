@@ -1,0 +1,8 @@
+prefix=/home/drozdzal/melson_ws/install
+
+Name: humanoid_hardware
+Description: Description of humanoid_hardware
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

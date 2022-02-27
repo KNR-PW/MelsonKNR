@@ -1,0 +1,8 @@
+prefix=/home/drozdzal/melson_ws/devel
+
+Name: humanoid_msgs
+Description: Description of humanoid_msgs
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
