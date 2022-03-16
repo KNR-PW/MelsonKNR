@@ -1,8 +1,0 @@
-prefix=/home/drozdzal/melson_ws/install
-
-Name: humanoid_examples
-Description: Description of humanoid_examples
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: rospy std_msgs humanoid_msgs

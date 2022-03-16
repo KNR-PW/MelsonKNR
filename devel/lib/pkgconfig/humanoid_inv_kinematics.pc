@@ -1,8 +1,0 @@
-prefix=/home/drozdzal/melson_ws/devel
-
-Name: humanoid_inv_kinematics
-Description: Description of humanoid_inv_kinematics
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
