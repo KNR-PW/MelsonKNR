@@ -1,0 +1,8 @@
+prefix=/home/drozdzal/MelsonKNR/devel
+
+Name: dynamixel_workbench_controllers
+Description: Description of dynamixel_workbench_controllers
+Version: 2.2.1
+Cflags: -I/home/drozdzal/MelsonKNR/src/dynamixel-workbench/dynamixel_workbench_controllers/include -I/usr/include/eigen3
+Libs: -L${prefix}/lib 
+Requires: roscpp sensor_msgs geometry_msgs dynamixel_workbench_msgs trajectory_msgs dynamixel_workbench_toolbox cmake_modules

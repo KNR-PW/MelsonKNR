@@ -1,0 +1,8 @@
+prefix=/home/drozdzal/MelsonKNR/install
+
+Name: humanoid_particle_filter
+Description: Description of humanoid_particle_filter
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

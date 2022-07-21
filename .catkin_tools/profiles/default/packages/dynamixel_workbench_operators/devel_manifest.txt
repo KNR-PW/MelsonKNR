@@ -1,0 +1,7 @@
+dynamixel-workbench/dynamixel_workbench_operators
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_operators/cmake.lock /home/drozdzal/MelsonKNR/devel/./cmake.lock
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_operators/share/dynamixel_workbench_operators/cmake/dynamixel_workbench_operatorsConfig-version.cmake /home/drozdzal/MelsonKNR/devel/share/dynamixel_workbench_operators/cmake/dynamixel_workbench_operatorsConfig-version.cmake
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_operators/share/dynamixel_workbench_operators/cmake/dynamixel_workbench_operatorsConfig.cmake /home/drozdzal/MelsonKNR/devel/share/dynamixel_workbench_operators/cmake/dynamixel_workbench_operatorsConfig.cmake
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_operators/lib/pkgconfig/dynamixel_workbench_operators.pc /home/drozdzal/MelsonKNR/devel/lib/pkgconfig/dynamixel_workbench_operators.pc
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_operators/lib/dynamixel_workbench_operators/joint_operator /home/drozdzal/MelsonKNR/devel/lib/dynamixel_workbench_operators/joint_operator
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_operators/lib/dynamixel_workbench_operators/wheel_operator /home/drozdzal/MelsonKNR/devel/lib/dynamixel_workbench_operators/wheel_operator

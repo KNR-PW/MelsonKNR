@@ -1,0 +1,8 @@
+prefix=/home/drozdzal/MelsonKNR/install
+
+Name: humanoid_vision
+Description: Description of humanoid_vision
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

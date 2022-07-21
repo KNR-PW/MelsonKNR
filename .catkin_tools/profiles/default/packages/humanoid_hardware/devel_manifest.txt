@@ -1,0 +1,5 @@
+humanoid_hardware
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_hardware/cmake.lock /home/drozdzal/MelsonKNR/devel/./cmake.lock
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_hardware/share/humanoid_hardware/cmake/humanoid_hardwareConfig.cmake /home/drozdzal/MelsonKNR/devel/share/humanoid_hardware/cmake/humanoid_hardwareConfig.cmake
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_hardware/share/humanoid_hardware/cmake/humanoid_hardwareConfig-version.cmake /home/drozdzal/MelsonKNR/devel/share/humanoid_hardware/cmake/humanoid_hardwareConfig-version.cmake
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_hardware/lib/pkgconfig/humanoid_hardware.pc /home/drozdzal/MelsonKNR/devel/lib/pkgconfig/humanoid_hardware.pc

@@ -1,0 +1,8 @@
+prefix=/home/drozdzal/MelsonKNR/devel
+
+Name: humanoid_bringup
+Description: Description of humanoid_bringup
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
