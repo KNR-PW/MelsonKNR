@@ -1,8 +1,7 @@
-from dynamixel_workbench_msgs.srv import DynamixelCommand,DynamixelCommandRequest
+from dynamixel_workbench_msgs.srv import DynamixelCommand,DynamixelCommandRequest,DynamixelStateList
 import rospy
 import time
 
-number_of_servos=20
 
 one_servo_service=rospy.ServiceProxy('/dynamixel_workbench/dynamixel_command',DynamixelCommand)
 one_servo_request=DynamixelCommandRequest()

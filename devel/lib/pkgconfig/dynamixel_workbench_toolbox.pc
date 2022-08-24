@@ -1,8 +1,0 @@
-prefix=/home/drozdzal/MelsonKNR/devel
-
-Name: dynamixel_workbench_toolbox
-Description: Description of dynamixel_workbench_toolbox
-Version: 2.2.1
-Cflags: -I/home/drozdzal/MelsonKNR/src/dynamixel-workbench/dynamixel_workbench_toolbox/include
-Libs: -L${prefix}/lib -ldynamixel_workbench_toolbox
-Requires: roscpp dynamixel_sdk

@@ -114,6 +114,8 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
+catkin_python_setup()
+
 ###########
 ## Build ##
 ###########
@@ -199,6 +201,7 @@ include_directories(
 
 catkin_install_python(PROGRAMS src/steer_servos.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 catkin_install_python(PROGRAMS src/one_servo.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+catkin_install_python(PROGRAMS src/stand_service.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 #############
 ## Testing ##
 #############

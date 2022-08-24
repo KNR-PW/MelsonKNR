@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib
 )
 
+catkin_python_setup()
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -58,6 +59,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
 FILES
 img.srv
+bool_service.srv
 )
 
 ## Generate actions in the 'action' folder

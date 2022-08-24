@@ -1,8 +1,0 @@
-prefix=/home/drozdzal/MelsonKNR/devel
-
-Name: dynamixel_workbench_operators
-Description: Description of dynamixel_workbench_operators
-Version: 2.2.1
-Cflags: -I/home/drozdzal/MelsonKNR/src/dynamixel-workbench/dynamixel_workbench_operators/include
-Libs: -L${prefix}/lib 
-Requires: roscpp std_srvs sensor_msgs trajectory_msgs geometry_msgs cmake_modules
