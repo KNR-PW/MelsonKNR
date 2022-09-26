@@ -114,6 +114,8 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
+catkin_python_setup()
+
 ###########
 ## Build ##
 ###########

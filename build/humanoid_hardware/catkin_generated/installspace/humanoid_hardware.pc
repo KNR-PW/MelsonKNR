@@ -1,8 +1,0 @@
-prefix=/home/drozdzal/MelsonKNR/install
-
-Name: humanoid_hardware
-Description: Description of humanoid_hardware
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: rospy std_msgs humanoid_msgs dynamixel_workbench_msgs

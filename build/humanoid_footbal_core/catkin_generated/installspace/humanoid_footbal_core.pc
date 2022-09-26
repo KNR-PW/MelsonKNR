@@ -1,8 +1,0 @@
-prefix=/home/drozdzal/MelsonKNR/install
-
-Name: humanoid_footbal_core
-Description: Description of humanoid_footbal_core
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
