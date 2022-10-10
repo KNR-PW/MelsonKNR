@@ -1,0 +1,6 @@
+dynamixel-workbench/dynamixel_workbench_toolbox
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_toolbox/cmake.lock /home/drozdzal/MelsonKNR/devel/./cmake.lock
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_toolbox/share/dynamixel_workbench_toolbox/cmake/dynamixel_workbench_toolboxConfig.cmake /home/drozdzal/MelsonKNR/devel/share/dynamixel_workbench_toolbox/cmake/dynamixel_workbench_toolboxConfig.cmake
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_toolbox/share/dynamixel_workbench_toolbox/cmake/dynamixel_workbench_toolboxConfig-version.cmake /home/drozdzal/MelsonKNR/devel/share/dynamixel_workbench_toolbox/cmake/dynamixel_workbench_toolboxConfig-version.cmake
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_toolbox/lib/libdynamixel_workbench_toolbox.so /home/drozdzal/MelsonKNR/devel/lib/libdynamixel_workbench_toolbox.so
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_toolbox/lib/pkgconfig/dynamixel_workbench_toolbox.pc /home/drozdzal/MelsonKNR/devel/lib/pkgconfig/dynamixel_workbench_toolbox.pc

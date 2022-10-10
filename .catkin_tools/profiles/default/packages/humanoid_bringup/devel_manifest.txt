@@ -1,0 +1,5 @@
+humanoid_bringup
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_bringup/cmake.lock /home/drozdzal/MelsonKNR/devel/./cmake.lock
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_bringup/share/humanoid_bringup/cmake/humanoid_bringupConfig-version.cmake /home/drozdzal/MelsonKNR/devel/share/humanoid_bringup/cmake/humanoid_bringupConfig-version.cmake
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_bringup/share/humanoid_bringup/cmake/humanoid_bringupConfig.cmake /home/drozdzal/MelsonKNR/devel/share/humanoid_bringup/cmake/humanoid_bringupConfig.cmake
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_bringup/lib/pkgconfig/humanoid_bringup.pc /home/drozdzal/MelsonKNR/devel/lib/pkgconfig/humanoid_bringup.pc

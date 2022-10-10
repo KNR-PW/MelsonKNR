@@ -1,0 +1,5 @@
+humanoid_footbal_core
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_footbal_core/cmake.lock /home/drozdzal/MelsonKNR/devel/./cmake.lock
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_footbal_core/share/humanoid_footbal_core/cmake/humanoid_footbal_coreConfig.cmake /home/drozdzal/MelsonKNR/devel/share/humanoid_footbal_core/cmake/humanoid_footbal_coreConfig.cmake
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_footbal_core/share/humanoid_footbal_core/cmake/humanoid_footbal_coreConfig-version.cmake /home/drozdzal/MelsonKNR/devel/share/humanoid_footbal_core/cmake/humanoid_footbal_coreConfig-version.cmake
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_footbal_core/lib/pkgconfig/humanoid_footbal_core.pc /home/drozdzal/MelsonKNR/devel/lib/pkgconfig/humanoid_footbal_core.pc

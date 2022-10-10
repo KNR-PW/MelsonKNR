@@ -14,7 +14,6 @@ Due to the fact that drone will be flying in Poland i am using abs value (Exif g
 class RpiSub:
     def __init__(self):
         rospy.init_node('img_server')
-        ret, frame = vid.read()
         self.img_sub = rospy.Subscriber("rpicam", Image, self.img_callback)
         self.bridge = CvBridge()
 
@@ -22,15 +21,11 @@ class RpiSub:
         cv_image = self.bridge.imgmsg_to_cv2(img_msg)
         now = datetime.now()
         current_time = now.strftime("%H %M %S")
-        #cv2.imwrite(f'{current_time}.jpg', cv_image)
+        cv2.imshow('okno',cv_image)
+        cv2.waitKey(1)
         print("Received img")
 
 
 if __name__ == '__main__':
-    rospy.init_node('img_sub')
-    while not rospy.is_shutdown():
-            ret, frame = vid.read()
-            pub.publish(bridge.cv2_to_imgmsg(frame))
-            rate.sleep()
     RpiSub()
     rospy.spin()

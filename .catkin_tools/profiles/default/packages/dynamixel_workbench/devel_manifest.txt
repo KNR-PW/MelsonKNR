@@ -1,0 +1,2 @@
+dynamixel-workbench/dynamixel_workbench
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench/cmake.lock /home/drozdzal/MelsonKNR/devel/./cmake.lock
