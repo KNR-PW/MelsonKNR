@@ -8,6 +8,11 @@ from cv_bridge import CvBridge, CvBridgeError
 def talker():
     try:
         vid = cv2.VideoCapture(0)
+        #vid.set(cv2.CAP_PROP_POS_FRAMES,0)
+        vid.set(cv2.CAP_PROP_FRAME_WIDTH,1920)
+        vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+        vid.set(cv2.CAP_PROP_FPS,120)
+        vid.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)  # manual mode
     except IOError:
         rospy.loginfo("Could not connect to given camera. Check camera Id")
 
@@ -15,7 +20,7 @@ def talker():
         bridge = CvBridge()
         pub = rospy.Publisher('rpicam', Image, queue_size=10)
         rospy.init_node('rpicam_pub', anonymous=True)
-        rate = rospy.Rate(1)  # 1Hz
+        rate = rospy.Rate(60)  # 10Hz
     except ROSException:
         rospy.loginfo("Encountered problem during initializing camera check device or device id")
 

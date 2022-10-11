@@ -1,0 +1,5 @@
+humanoid_vision
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_vision/cmake.lock /home/drozdzal/MelsonKNR/devel/./cmake.lock
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_vision/share/humanoid_vision/cmake/humanoid_visionConfig-version.cmake /home/drozdzal/MelsonKNR/devel/share/humanoid_vision/cmake/humanoid_visionConfig-version.cmake
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_vision/share/humanoid_vision/cmake/humanoid_visionConfig.cmake /home/drozdzal/MelsonKNR/devel/share/humanoid_vision/cmake/humanoid_visionConfig.cmake
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_vision/lib/pkgconfig/humanoid_vision.pc /home/drozdzal/MelsonKNR/devel/lib/pkgconfig/humanoid_vision.pc

@@ -1,0 +1,10 @@
+humanoid_examples
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_examples/cmake.lock /home/drozdzal/MelsonKNR/devel/./cmake.lock
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_examples/share/humanoid_examples/cmake/humanoid_examplesConfig.cmake /home/drozdzal/MelsonKNR/devel/share/humanoid_examples/cmake/humanoid_examplesConfig.cmake
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_examples/share/humanoid_examples/cmake/humanoid_examplesConfig-version.cmake /home/drozdzal/MelsonKNR/devel/share/humanoid_examples/cmake/humanoid_examplesConfig-version.cmake
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_examples/lib/pkgconfig/humanoid_examples.pc /home/drozdzal/MelsonKNR/devel/lib/pkgconfig/humanoid_examples.pc
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_examples/lib/humanoid_examples/img_pub.py /home/drozdzal/MelsonKNR/devel/lib/humanoid_examples/img_pub.py
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_examples/lib/humanoid_examples/img_sub.py /home/drozdzal/MelsonKNR/devel/lib/humanoid_examples/img_sub.py
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_examples/lib/humanoid_examples/img_service_server.py /home/drozdzal/MelsonKNR/devel/lib/humanoid_examples/img_service_server.py
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_examples/lib/humanoid_examples/img_service_client.py /home/drozdzal/MelsonKNR/devel/lib/humanoid_examples/img_service_client.py
+/home/drozdzal/MelsonKNR/devel/.private/humanoid_examples/lib/humanoid_examples/cmake.lock /home/drozdzal/MelsonKNR/devel/lib/humanoid_examples/cmake.lock

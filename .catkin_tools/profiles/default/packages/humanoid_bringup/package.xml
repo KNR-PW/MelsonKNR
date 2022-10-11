@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>humanoid_hardware</name>
+  <name>humanoid_bringup</name>
   <version>0.0.0</version>
-  <description>The humanoid_hardware package</description>
+  <description>The humanoid_bringup package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/humanoid_hardware</url> -->
+  <!-- <url type="website">http://wiki.ros.org/humanoid_bringup</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
@@ -58,8 +58,6 @@
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-   <depend>humanoid_msgs</depend>
-   <depend>dynamixel_workbench_msgs</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

@@ -1,0 +1,7 @@
+dynamixel-workbench/dynamixel_workbench_controllers
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_controllers/cmake.lock /home/drozdzal/MelsonKNR/devel/./cmake.lock
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_controllers/share/dynamixel_workbench_controllers/cmake/dynamixel_workbench_controllersConfig-version.cmake /home/drozdzal/MelsonKNR/devel/share/dynamixel_workbench_controllers/cmake/dynamixel_workbench_controllersConfig-version.cmake
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_controllers/share/dynamixel_workbench_controllers/cmake/dynamixel_workbench_controllersConfig.cmake /home/drozdzal/MelsonKNR/devel/share/dynamixel_workbench_controllers/cmake/dynamixel_workbench_controllersConfig.cmake
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_controllers/lib/pkgconfig/dynamixel_workbench_controllers.pc /home/drozdzal/MelsonKNR/devel/lib/pkgconfig/dynamixel_workbench_controllers.pc
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_controllers/lib/dynamixel_workbench_controllers/find_dynamixel /home/drozdzal/MelsonKNR/devel/lib/dynamixel_workbench_controllers/find_dynamixel
+/home/drozdzal/MelsonKNR/devel/.private/dynamixel_workbench_controllers/lib/dynamixel_workbench_controllers/dynamixel_workbench_controllers /home/drozdzal/MelsonKNR/devel/lib/dynamixel_workbench_controllers/dynamixel_workbench_controllers
