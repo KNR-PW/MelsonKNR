@@ -1,7 +1,6 @@
 import math
 import numpy as np
-import Kinematics as kin
-
+from RobotParameters import Kinematics as kin
 
 # transformacja z macierzy eulera do macierzy rotacji
 def euler2rot(e):
