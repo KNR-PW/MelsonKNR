@@ -1,0 +1,7 @@
+<launch>
+
+<!--NASZE NODE-->
+<node name="rpicam_sub" pkg="humanoid_vision" type="img_pub.py"/>
+<node name="rpicam_pub" pkg="humanoid_vision" type="img_sub.py"/>
+  
+</launch>
