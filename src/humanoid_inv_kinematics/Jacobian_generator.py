@@ -4,7 +4,7 @@ from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters import Kinematics
 from src.humanoid_inv_kinematics.MelsonDynamic import ConvertToRF as con
 from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters import * # <- wszystkie wektory stałe, masy oraz wersory "u" brane z tego
 
-# Główna funkcja do generacji Jakobianu Melsona
+# Główna funkcja do generacji Jakobianu Melsona (nie Melmana!)
 
 # Praca oparta podstawie dokumentu "Jakobian Melsona"
 
@@ -82,6 +82,7 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     E = np.array([[math.cos(e1)*math.sin(e2)/math.cos(e2),math.sin(e2)*math.sin(e1)/cos(e2),1],
                   [-math.sin(e1), cos(e1), 0],
                   [cos(e1)/cos(e2), sin(e1)/cos(e2), 0]])
+
     T = np.array([[np.ones(12, 12), np.zeros(12, 4)],
                   [np.zeros(3, 12), E, np.zeros(3,1)],
                   [np.zeros(1,15), 1]])
@@ -347,7 +348,7 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jv15_LH = np.zeros((3,1))
 
     u15_com = u15_RH
-    Jv15_com = (skew_matrix(u15_com)/TotalMas)(R_RF_RFA @ r_com_RFA * mRFA) # w doc chyba jest blad
+    Jv15_com = (skew_matrix(u15_com)/TotalMas)(R_RF_RFA @ r_com_RFA * mRFA) 
     Jomega15_LF = np.zeros((3,1))
     Jomega15_eta = 0
 
@@ -438,6 +439,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     J19 = np.concatenate((Jv19_LF, Jv19_RH, Jv19_LH, Jv19_LF, Jv19_com, Jomega19_LF, Jomega19_eta ))
 
     J = np.column_stack(J1,J2,J3,J4,J5,J6,J7,J8,J9,J10,J11,J12,J13,J14,J15,J16,J17,J18,J19)
+
     Ja = T @ J
 
     return Ja
+
