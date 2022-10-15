@@ -148,8 +148,8 @@ def Jacobian(q,trajectory_vector):
     u3_com = u3_LF
     Jv3_com = ((skew_matrix(u3_com))/TotalMas) @ Jv1_com_prev
     Jomega3_LF = u3_LF
-    Jomega3_eta = (1 / (math.sqrt(1 - R_0_W[3, 1] ** 2))) * \
-                  (R_0_RF @ np.transpose(kin.rotZ(RTz) @ kin.rotX(RTx) @ OmegaY @ kin.rotY(RTy) @ R_RT_RS @ R_RS_RF))[3, 1]
+    Jomega3_eta = (1 / (math.sqrt(1 - R_0_W[2, 0] ** 2))) * \
+                  (R_0_RF @ np.transpose(kin.rotZ(RTz) @ kin.rotX(RTx) @ OmegaY @ kin.rotY(RTy) @ R_RT_RS @ R_RS_RF))[2, 0]
 
     J3 = np.concatenate((Jv3_LF, Jv3_RH, Jv3_LH, Jv3_com, Jomega3_LF))
     J3 = np.append(J3, Jomega3_eta)
@@ -170,8 +170,8 @@ def Jacobian(q,trajectory_vector):
     Jv4_com_prev = (b*mRT + (-a) * (mW + mCH + mRA + mRFA + mLA + mLFA + mLT + mLS + mLF) + Jv1_com_prev)
     Jv4_com = ((skew_matrix(u4_com))/TotalMas) @ Jv4_com_prev
     Jomega4_LF = u4_LF
-    Jomega4_eta = (1 / (math.sqrt(1 - R_0_W[3, 1] ** 2))) * \
-                  (R_0_RF @ np.transpose(R_W_RT @ OmegaY @ R_RT_RS @ R_RS_RF))[3, 1]
+    Jomega4_eta = (1 / (math.sqrt(1 - R_0_W[2, 0] ** 2))) * \
+                  (R_0_RF @ np.transpose(R_W_RT @ OmegaY @ R_RT_RS @ R_RS_RF))[2, 0]
 
     J4 = np.concatenate((Jv4_LF, Jv4_RH, Jv4_LH, Jv4_com, Jomega4_LF))
     J4 = np.append(J4, Jomega4_eta)
@@ -222,7 +222,7 @@ def Jacobian(q,trajectory_vector):
     # kolumna 7 #
 
     e = R_RF_W @ (-r_W_RT + r_W_LT)
-    d7_LF = d7_LF - e
+    d7_LF = d1_LF - e
     u7_LF = R_RF_W @ Uz
     Jv7_LF = skew_matrix(u7_LF) @ d7_LF
     Jv7_RH = np.zeros((3, 1))
@@ -444,7 +444,7 @@ def Jacobian(q,trajectory_vector):
     Jv19_LH = skew_matrix(u19_LH) @ d19_LH
 
     u19_com = u19_LH
-    Jv19_com = (skew_matrix(u19_com)/TotalMas)*(R_RF_CH @ r_com_CH * mCH
+    Jv19_com = (skew_matrix(u19_com)/TotalMas)@(R_RF_CH @ r_com_CH * mCH
                 + (R_RF_CH @ r_CH_RA + R_RF_RA @ r_com_RA) * mRA
                 + (R_RF_CH @ r_CH_RA + R_RF_RA @ r_RA_RFA + R_RF_RFA @ r_com_RFA) * mRFA
                 + (R_RF_CH @ r_CH_RA + R_RF_LA @ r_com_LA) * mLA
@@ -456,7 +456,7 @@ def Jacobian(q,trajectory_vector):
     J19 = np.concatenate((Jv19_LF, Jv19_RH, Jv19_LH, Jv19_com, Jomega19_LF))
     J19 = np.append(J19, Jomega19_eta)
 
-    J = np.column_stack(J1,J2,J3,J4,J5,J6,J7,J8,J9,J10,J11,J12,J13,J14,J15,J16,J17,J18,J19)
+    J = np.column_stack((J1,J2,J3,J4,J5,J6,J7,J8,J9,J10,J11,J12,J13,J14,J15,J16,J17,J18,J19))
 
     # Ja = T @ J
 
