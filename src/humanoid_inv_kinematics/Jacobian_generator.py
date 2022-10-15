@@ -101,7 +101,7 @@ def Jacobian(q,trajectory_vector):
     u1_LH = u1_LF
     Jv1_LH = skew_matrix(u1_LH) @ d1_LH
     u1_com = u1_LF
-    Jv1_com = (skew_matrix(u1_com) / TotalMas) @( R_RF_W @ (-r_W_RT + r_com_W)*mW
+    Jv1_com_prev = ( R_RF_W @ (-r_W_RT + r_com_W)*mW
               + ( -R_RF_W @ (-r_W_RT+r_W_CH) +R_RF_CH @ r_com_CH) * mCH
               + (-R_RF_W @ (-r_W_RT + r_W_CH) + R_RF_CH @ r_CH_RA + R_RF_RA @ r_com_RA) * mRA
               + (d1_RH - R_RF_RFA @ (r_RFA_RH - r_com_RFA)) * mRFA
@@ -110,6 +110,7 @@ def Jacobian(q,trajectory_vector):
               + (R_RF_W @ (-r_W_RT + r_W_LT) + R_RF_LT @ r_com_LT) * mLT
               + (R_RF_W @ (-r_W_RT + r_W_LT) + R_RF_LT @ r_LT_LS + R_RF_LS @ r_com_LS) * mLS
               + (d1_LF + R_RF_LF @ r_com_LF) * mLF)
+    Jv1_com = (skew_matrix(u1_com) / TotalMas) @ Jv1_com_prev
     Jomega1_LF = u1_LF
     Jomega1_eta = (1/(math.sqrt(1-R_0_W[2,0] ** 2)))*(R_0_RF @ np.transpose(OmegaZ @ R_W_RF))[2,0]
 
@@ -127,9 +128,9 @@ def Jacobian(q,trajectory_vector):
     u2_LH = u2_LF
     Jv2_LH = skew_matrix(u2_LH) @ d2_LH
     u2_com = u2_LF
-    Jv2_com = (skew_matrix(u2_com)) @ np.linalg.inv((skew_matrix(u1_com))) @ Jv1_com
+    Jv2_com = ((skew_matrix(u2_com)) / TotalMas) @ Jv1_com_prev
     Jomega2_LF = u2_LF
-    Jomega2_eta = (1 / (math.sqrt(1-R_0_W[3, 1] ** 2))) * (R_0_RF @ np.transpose(kin.rotZ(RTz) @ OmegaX @ kin.rotX(RTx) @ kin.rotY(RTy) @ R_RT_RS @ R_RS_RF))[3, 1]
+    Jomega2_eta = (1 / (math.sqrt(1-R_0_W[2, 0] ** 2))) * (R_0_RF @ np.transpose(kin.rotZ(RTz) @ OmegaX @ kin.rotX(RTx) @ kin.rotY(RTy) @ R_RT_RS @ R_RS_RF))[2, 0]
 
     J2 = np.concatenate((Jv2_LF, Jv2_RH, Jv2_LH, Jv2_com, Jomega2_LF, Jomega2_eta))
     J2 = np.append(J2, Jomega2_eta)
@@ -145,7 +146,7 @@ def Jacobian(q,trajectory_vector):
     u3_LH = u3_LF
     Jv3_LH = skew_matrix(u3_LH) @ d3_LH
     u3_com = u3_LF
-    Jv3_com = (skew_matrix(u3_com)) @ np.linalg.inv((skew_matrix(u1_com))) @ Jv1_com
+    Jv3_com = ((skew_matrix(u3_com))/TotalMas) @ Jv1_com_prev
     Jomega3_LF = u3_LF
     Jomega3_eta = (1 / (math.sqrt(1 - R_0_W[3, 1] ** 2))) * \
                   (R_0_RF @ np.transpose(kin.rotZ(RTz) @ kin.rotX(RTx) @ OmegaY @ kin.rotY(RTy) @ R_RT_RS @ R_RS_RF))[3, 1]
@@ -166,7 +167,8 @@ def Jacobian(q,trajectory_vector):
     u4_LH = u4_LF
     Jv4_LH = skew_matrix(u4_LH) @ d4_LH
     u4_com = u4_LF
-    Jv4_com = ((skew_matrix(u4_com))/TotalMas) @ (b*mRT + (-a) * (mW + mCH + mRA + mRFA + mLA + mLFA + mLT + mLS + mLF) + np.linalg.inv((skew_matrix(u1_com))) @ Jv1_com * TotalMas)
+    Jv4_com_prev = (b*mRT + (-a) * (mW + mCH + mRA + mRFA + mLA + mLFA + mLT + mLS + mLF) + Jv1_com_prev)
+    Jv4_com = ((skew_matrix(u4_com))/TotalMas) @ Jv4_com_prev
     Jomega4_LF = u4_LF
     Jomega4_eta = (1 / (math.sqrt(1 - R_0_W[3, 1] ** 2))) * \
                   (R_0_RF @ np.transpose(R_W_RT @ OmegaY @ R_RT_RS @ R_RS_RF))[3, 1]
@@ -187,12 +189,12 @@ def Jacobian(q,trajectory_vector):
     u5_LH = u5_LF
     Jv5_LH = skew_matrix(u5_LH) @ d5_LH
     u5_com = u5_LF
-    Jv5_com = ((skew_matrix(u5_com)) / TotalMas) @ (
-                d * mRS + (-c) * (mRT + mW + mCH + mRA + mRFA + mLA + mLFA + mLT + mLS + mLF) + np.linalg.inv(
-            (skew_matrix(u4_com))) @ Jv4_com * TotalMas)
+    Jv5_com_prev = (
+                d * mRS + (-c) * (mRT + mW + mCH + mRA + mRFA + mLA + mLFA + mLT + mLS + mLF) + Jv4_com_prev)
+    Jv5_com = ((skew_matrix(u5_com)) / TotalMas) @ Jv5_com_prev
     Jomega5_LF = u5_LF
-    Jomega5_eta = (1 / (math.sqrt(1 - R_0_W[3, 1] ** 2))) * \
-                  (R_0_RF @ np.transpose(R_W_RT @ R_RT_RS @ OmegaY @ R_RS_RF))[3, 1]
+    Jomega5_eta = (1 / (math.sqrt(1 - R_0_W[2, 0] ** 2))) * \
+                  (R_0_RF @ np.transpose(R_W_RT @ R_RT_RS @ OmegaY @ R_RS_RF))[2, 0]
 
     J5 = np.concatenate((Jv5_LF, Jv5_RH, Jv5_LH, Jv5_com, Jomega5_LF, Jomega5_eta))
     J5 = np.append(J5, Jomega5_eta)
@@ -208,10 +210,10 @@ def Jacobian(q,trajectory_vector):
     u6_LH = u6_LF
     Jv6_LH = skew_matrix(u6_LH) @ d6_LH
     u6_com = u6_LF
-    Jv6_com = (skew_matrix(u6_com)) @ np.linalg.inv((skew_matrix(u5_com))) @ Jv5_com
+    Jv6_com = ((skew_matrix(u6_com))/TotalMas) @ Jv5_com_prev
     Jomega6_LF = u6_LF
-    Jomega6_eta = (1 / (math.sqrt(1 - R_0_W[3, 1] ** 2))) * \
-                  (R_0_RF @ np.transpose(R_W_RT @ R_RT_RS @ kin.rotY(RFy) @ OmegaX @ kin.rotX(RFx)))[3, 1]
+    Jomega6_eta = (1 / (math.sqrt(1 - R_0_W[2, 0] ** 2))) * \
+                  (R_0_RF @ np.transpose(R_W_RT @ R_RT_RS @ kin.rotY(RFy) @ OmegaX @ kin.rotX(RFx)))[2, 0]
 
     J6 = np.concatenate((Jv6_LF, Jv6_RH, Jv6_LH, Jv6_com, Jomega6_LF, Jomega6_eta))
     J6 = np.append(J6, Jomega6_eta)
@@ -226,9 +228,10 @@ def Jacobian(q,trajectory_vector):
     Jv7_RH = np.zeros((3, 1))
     Jv7_LH = np.zeros((3, 1))
     u7_com = u7_LF
-    Jv7_com = (skew_matrix(u7_com) / TotalMas) @ (R_RF_LT @ r_com_LT * mLT
+    Jv7_com_prev = (R_RF_LT @ r_com_LT * mLT
               + (R_RF_LT @ r_LT_LS + R_RF_LS @ r_com_LS) * mLS
               + (R_RF_LT @ r_LT_LS + R_RF_LS @ r_LS_LF + R_RF_LF @ r_com_LF) * mLF)
+    Jv7_com = (skew_matrix(u7_com) / TotalMas) @ Jv7_com_prev
     Jomega7_LF = u7_LF
     Jomega7_eta = 0
 
@@ -243,7 +246,7 @@ def Jacobian(q,trajectory_vector):
     Jv8_RH = np.zeros((3, 1))
     Jv8_LH = np.zeros((3, 1))
     u8_com = u8_LF
-    Jv8_com = skew_matrix(u8_com) @ np.linalg.inv(skew_matrix(u7_com)) @ Jv7_com
+    Jv8_com = (skew_matrix(u8_com)/TotalMas) @ Jv7_com_prev
     Jomega8_LF = u8_LF
     Jomega8_eta = 0
 
@@ -258,7 +261,7 @@ def Jacobian(q,trajectory_vector):
     Jv9_RH = np.zeros((3, 1))
     Jv9_LH = np.zeros((3, 1))
     u9_com = u9_LF
-    Jv9_com = skew_matrix(u9_com) @ np.linalg.inv(skew_matrix(u7_com)) @ Jv7_com
+    Jv9_com = (skew_matrix(u9_com)/TotalMas) @ Jv7_com_prev
     Jomega9_LF = u9_LF
     Jomega9_eta = 0
 
@@ -274,7 +277,7 @@ def Jacobian(q,trajectory_vector):
     Jv10_RH = np.zeros((3,1))
     Jv10_LH = np.zeros((3,1))
     u10_com = u10_LF
-    Jv10_com = (skew_matrix(u10_com)/TotalMas) @ (np.linalg.inv(skew_matrix(u7_com))@Jv7_com*TotalMas - R_RF_LT @ r_com_LT*mLT+(-f) * (mLS+mLF))
+    Jv10_com = (skew_matrix(u10_com)/TotalMas) @ (Jv7_com_prev - R_RF_LT @ r_com_LT*mLT+(-f) * (mLS+mLF))
     Jomega10_LF = u10_LF
     Jomega10_eta = 0
 
@@ -286,7 +289,8 @@ def Jacobian(q,trajectory_vector):
     Jv11_RH =np.zeros((3,1))
     Jv11_LH =np.zeros((3,1))
     u11_com = R_RF_LS @ Uy
-    Jv11_com = (skew_matrix(u11_com)/TotalMas)*(R_RF_LF @ r_com_LF * mLF)
+    Jv11_com_prev = (R_RF_LF @ r_com_LF * mLF)
+    Jv11_com = (skew_matrix(u11_com)/TotalMas) @ Jv11_com_prev
     Jomega11_LF = R_RF_LS @ Uy
     Jomega11_eta = 0
 
@@ -300,7 +304,7 @@ def Jacobian(q,trajectory_vector):
     Jv12_RH = np.zeros((3, 1))
     Jv12_LH = np.zeros((3, 1))
     u12_com = R_RF_LS@kin.rotY(LFy)@Ux
-    Jv12_com = skew_matrix(u12_com) @ np.linalg.inv(skew_matrix(u12_com)) @ Jv11_com
+    Jv12_com = (skew_matrix(u12_com)/TotalMas) @  Jv11_com_prev
     Jomega12_LF = R_RF_LS @ kin.rotY(LFy) @ Ux
     Jomega12_eta = 0
 
