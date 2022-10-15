@@ -92,7 +92,7 @@ def Jacobian(q,trajectory_vector):
     # kolumna 1 #
 
     d1_LF = R_RF_W @ (-r_W_RT + r_W_LT) + R_RF_LT @ r_LT_LS + R_RF_LS @ r_LS_LF
-    u1_LF = R_RF_RT @ kin.rotY(-RTy) @ kin.rotX(-RTx) @ Uz
+    u1_LF = - R_RF_RT @ kin.rotY(-RTy) @ kin.rotX(-RTx) @ Uz
     Jv1_LF = skew_matrix(u1_LF) @ d1_LF
     d1_RH = R_RF_W @ (-r_W_RT + r_W_CH) + R_RF_CH @ r_CH_RA + R_RF_RA @ r_RA_RFA + R_RF_RFA @ r_RFA_RH
     u1_RH = u1_LF
@@ -119,7 +119,7 @@ def Jacobian(q,trajectory_vector):
     # kolumna 2 #
 
     d2_LF = d1_LF
-    u2_LF = R_RF_RT @ kin.rotY(-RTy) @ Ux
+    u2_LF = - R_RF_RT @ kin.rotY(-RTy) @ Ux
     Jv2_LF = skew_matrix(u2_LF) @ d2_LF
     d2_RH = d1_RH
     u2_RH = u2_LF
@@ -137,7 +137,7 @@ def Jacobian(q,trajectory_vector):
     # kolumna 3 #
 
     d3_LF = d1_LF
-    u3_LF = R_RF_RT @ Uy
+    u3_LF = - R_RF_RT @ Uy
     Jv3_LF = skew_matrix(u3_LF) @ d3_LF
     d3_RH = d1_RH
     u3_RH = u3_LF
@@ -158,7 +158,7 @@ def Jacobian(q,trajectory_vector):
     a = R_RF_RT @ r_RT_RS
     b = R_RF_RT @ (-r_RT_RS + r_com_RT)
     d4_LF = d1_LF - a
-    u4_LF = R_RF_RS @ Uy
+    u4_LF = - R_RF_RS @ Uy
     Jv4_LF = skew_matrix(u4_LF) @ d4_LF
     d4_RH = d1_RH - a
     u4_RH = u4_LF
@@ -180,7 +180,7 @@ def Jacobian(q,trajectory_vector):
     c = R_RF_RS @ r_RS_RF
     d = R_RF_RS @ (-r_RS_RF + r_com_RS)
     d5_LF = d4_LF - c
-    u5_LF = kin.rotY(-RFx) @ Uy
+    u5_LF = - kin.rotY(-RFx) @ Uy
     Jv5_LF = skew_matrix(u5_LF) @ d5_LF
     d5_RH = d4_RH - c
     u5_RH = u5_LF
@@ -201,7 +201,7 @@ def Jacobian(q,trajectory_vector):
     # kolumna 6 #
 
     d6_LF = d5_LF
-    u6_LF = Ux
+    u6_LF = - Ux
     Jv6_LF = skew_matrix(u6_LF) @ d6_LF
     d6_RH = d5_RH
     u6_RH = u5_LF
@@ -462,4 +462,4 @@ def Jacobian(q,trajectory_vector):
 
     return J
 
-print(Jacobian([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]))
+print(Jacobian([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]))
