@@ -19,9 +19,9 @@ from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters i
 # Funkcja generująca macierz stowarzyszoną z wektorem:
 
 def skew_matrix(r):
-    R = np.array([[0,-r(2),r(1)],
-                  [r(2),0,-r(0)],
-                  [-r(1),r(0),0]])
+    R = np.array([[0,-r[2],r[1]],
+                  [r[2],0,-r[0]],
+                  [-r[1],r[0],0]])
     return R
 # Funkcja generująca odwrotną macierz rotacji:
 
@@ -32,10 +32,10 @@ def inv_rot(R):
 
 # TODO umiescic link do pdf'a
 
-def Jacobian(q,r_trajectory_vector,trajectory_vector):
-    RTz = q(1); RTx = q(2); RTy = q(3); RSy = q(4); RFy = q(5); RFx = q(6); LTz = q(7); LTx = q(8); LTy = q(9); LSy = q(10);
-    LFy = q(11); LFx = q(12); RAy = q(13); RAx = q(14); RFAy = q(15); LAy = q(16); LAx = q(17); LFAy = q(18); CHz = q(19)
 
+def Jacobian(q,trajectory_vector):
+    RTz = q[0]; RTx = q[1]; RTy = q[2]; RSy = q[3]; RFy = q[4]; RFx = q[5]; LTz = q[6]; LTx = q[7]; LTy = q[8]; LSy = q[9]
+    LFy = q[10]; LFx = q[11]; RAy = q[12]; RAx = q[13]; RFAy = q[14]; LAy = q[15]; LAx = q[16]; LFAy = q[17]; CHz = q[18]
 
     R_RA_RFA = kin.rotY(RFAy)
     R_CH_RA = kin.rotY(RAy)@kin.rotX(RAx)
@@ -79,13 +79,13 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     e1 = trajectory_vector[15]
     e2 = trajectory_vector[16]
 
-    E = np.array([[math.cos(e1)*math.sin(e2)/math.cos(e2),math.sin(e2)*math.sin(e1)/cos(e2),1],
-                  [-math.sin(e1), cos(e1), 0],
-                  [cos(e1)/cos(e2), sin(e1)/cos(e2), 0]])
+    E = np.array([[math.cos(e1)*math.sin(e2)/math.cos(e2),math.sin(e2)*math.sin(e1)/math.cos(e2),1],
+                  [-math.sin(e1), math.cos(e1), 0],
+                  [math.cos(e1)/math.cos(e2), math.sin(e1)/math.cos(e2), 0]])
 
-    T = np.array([[np.ones(12, 12), np.zeros(12, 4)],
-                  [np.zeros(3, 12), E, np.zeros(3,1)],
-                  [np.zeros(1,15), 1]])
+    T = np.array([[np.ones((12, 12)), np.zeros((12, 4))],
+                  [np.zeros((3, 12)), E, np.zeros((3,1))],
+                  [np.zeros((1,15)), 1]])
 
     # --- Prawa Noga ---
 
@@ -111,10 +111,10 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
               + (R_RF_W @ (-r_W_RT + r_W_LT) + R_RF_LT @ r_LT_LS + R_RF_LS @ r_com_LS) * mLS
               + (d1_LF + R_RF_LF @ r_com_LF) * mLF)
     Jomega1_LF = u1_LF
-    Jomega1_eta = (1/(math.sqrt(1-R_0_W[3,1] ** 2)))*(R_0_RF @ np.transpose(OmegaZ @ R_W_RF))[3,1]
+    Jomega1_eta = (1/(math.sqrt(1-R_0_W[2,0] ** 2)))*(R_0_RF @ np.transpose(OmegaZ @ R_W_RF))[2,0]
 
-    J1 = np.concatenate((Jv1_LF, Jv1_RH, Jv1_LH, Jv1_LF, Jv1_com, Jomega1_LF, Jomega1_eta))
-
+    J1 = np.concatenate([Jv1_LF, Jv1_RH, Jv1_LH, Jv1_com, Jomega1_LF])
+    J1 = np.append(J1, Jomega1_eta)
     # kolumna 2 #
 
     d2_LF = d1_LF
@@ -131,8 +131,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega2_LF = u2_LF
     Jomega2_eta = (1 / (math.sqrt(1-R_0_W[3, 1] ** 2))) * (R_0_RF @ np.transpose(kin.rotZ(RTz) @ OmegaX @ kin.rotX(RTx) @ kin.rotY(RTy) @ R_RT_RS @ R_RS_RF))[3, 1]
 
-    J2 = np.concatenate((Jv2_LF, Jv2_RH, Jv2_LH, Jv2_LF, Jv2_com, Jomega2_LF, Jomega2_eta))
-
+    J2 = np.concatenate((Jv2_LF, Jv2_RH, Jv2_LH, Jv2_com, Jomega2_LF, Jomega2_eta))
+    J2 = np.append(J2, Jomega2_eta)
     # kolumna 3 #
 
     d3_LF = d1_LF
@@ -150,8 +150,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega3_eta = (1 / (math.sqrt(1 - R_0_W[3, 1] ** 2))) * \
                   (R_0_RF @ np.transpose(kin.rotZ(RTz) @ kin.rotX(RTx) @ OmegaY @ kin.rotY(RTy) @ R_RT_RS @ R_RS_RF))[3, 1]
 
-    J3 = np.concatenate((Jv3_LF, Jv3_RH, Jv3_LH, Jv3_LF, Jv3_com, Jomega3_LF, Jomega3_eta))
-
+    J3 = np.concatenate((Jv3_LF, Jv3_RH, Jv3_LH, Jv3_com, Jomega3_LF, Jomega3_eta))
+    J3 = np.append(J3, Jomega3_eta)
     # kolumna 4 #
 
     a = R_RF_RT @ r_RT_RS
@@ -171,8 +171,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega4_eta = (1 / (math.sqrt(1 - R_0_W[3, 1] ** 2))) * \
                   (R_0_RF @ np.transpose(R_W_RT @ OmegaY @ R_RT_RS @ R_RS_RF))[3, 1]
 
-    J4 = np.concatenate((Jv4_LF, Jv4_RH, Jv4_LH, Jv4_LF, Jv4_com, Jomega4_LF, Jomega4_eta))
-
+    J4 = np.concatenate((Jv4_LF, Jv4_RH, Jv4_LH, Jv4_com, Jomega4_LF, Jomega4_eta))
+    J4 = np.append(J4, Jomega4_eta)
     # kolumna 5 #
 
     c = R_RF_RS @ r_RS_RF
@@ -194,8 +194,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega5_eta = (1 / (math.sqrt(1 - R_0_W[3, 1] ** 2))) * \
                   (R_0_RF @ np.transpose(R_W_RT @ R_RT_RS @ OmegaY @ R_RS_RF))[3, 1]
 
-    J5 = np.concatenate((Jv5_LF, Jv5_RH, Jv5_LH, Jv5_LF, Jv5_com, Jomega5_LF, Jomega5_eta))
-
+    J5 = np.concatenate((Jv5_LF, Jv5_RH, Jv5_LH, Jv5_com, Jomega5_LF, Jomega5_eta))
+    J5 = np.append(J5, Jomega5_eta)
     # kolumna 6 #
 
     d6_LF = d5_LF
@@ -213,8 +213,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega6_eta = (1 / (math.sqrt(1 - R_0_W[3, 1] ** 2))) * \
                   (R_0_RF @ np.transpose(R_W_RT @ R_RT_RS @ kin.rotY(RFy) @ OmegaX @ kin.rotX(RFx)))[3, 1]
 
-    J6 = np.concatenate((Jv6_LF, Jv6_RH, Jv6_LH, Jv6_LF, Jv6_com, Jomega6_LF, Jomega6_eta))
-
+    J6 = np.concatenate((Jv6_LF, Jv6_RH, Jv6_LH, Jv6_com, Jomega6_LF, Jomega6_eta))
+    J6 = np.append(J6, Jomega6_eta)
     # --- Lewa Noga ---
 
     # kolumna 7 #
@@ -232,7 +232,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega7_LF = u7_LF
     Jomega7_eta = 0
 
-    J7 = np.concatenate((Jv7_LF, Jv7_RH, Jv7_LH, Jv7_LF, Jv7_com, Jomega7_LF, Jomega7_eta))
+    J7 = np.concatenate((Jv7_LF, Jv7_RH, Jv7_LH, Jv7_com, Jomega7_LF, Jomega7_eta))
+    J7 = np.append(J7, Jomega7_eta)
 
     # kolumna 8 #
 
@@ -246,7 +247,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega8_LF = u8_LF
     Jomega8_eta = 0
 
-    J8 = np.concatenate((Jv8_LF, Jv8_RH, Jv8_LH, Jv8_LF, Jv8_com, Jomega8_LF, Jomega8_eta))
+    J8 = np.concatenate((Jv8_LF, Jv8_RH, Jv8_LH, Jv8_com, Jomega8_LF, Jomega8_eta))
+    J8 = np.append(J8, Jomega8_eta)
 
     # kolumna 9 #
 
@@ -260,7 +262,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega9_LF = u9_LF
     Jomega9_eta = 0
 
-    J9 = np.concatenate((Jv9_LF, Jv9_RH, Jv9_LH, Jv9_LF, Jv9_com, Jomega9_LF, Jomega9_eta))
+    J9 = np.concatenate((Jv9_LF, Jv9_RH, Jv9_LH, Jv9_com, Jomega9_LF, Jomega9_eta))
+    J9 = np.append(J9, Jomega9_eta)
 
     # kolumna 10 #
 
@@ -275,8 +278,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega10_LF = u10_LF
     Jomega10_eta = 0
 
-    J10 = np.concatenate((Jv10_LF, Jv10_RH, Jv10_LH, Jv10_LF, Jv10_com, Jomega10_LF, Jomega10_eta ))
-
+    J10 = np.concatenate((Jv10_LF, Jv10_RH, Jv10_LH, Jv10_com, Jomega10_LF, Jomega10_eta ))
+    J10 = np.append(J10, Jomega10_eta)
     # kolumna 11 #
 
     Jv11_LF =np.zeros((3,1))
@@ -287,7 +290,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega11_LF = R_RF_LS @ Uy
     Jomega11_eta = 0
 
-    J11 = np.concatenate((Jv11_LF, Jv11_RH, Jv11_LH, Jv11_LF, Jv11_com, Jomega11_LF, Jomega11_eta ))
+    J11 = np.concatenate((Jv11_LF, Jv11_RH, Jv11_LH, Jv11_com, Jomega11_LF, Jomega11_eta ))
+    J11 = np.append(J11, Jomega11_eta)
 
 
     # kolumna 12 #
@@ -300,7 +304,9 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega12_LF = R_RF_LS @ kin.rotY(LFy) @ Ux
     Jomega12_eta = 0
 
-    J12 = np.concatenate((Jv12_LF, Jv12_RH, Jv12_LH, Jv12_LF, Jv12_com, Jomega12_LF, Jomega12_eta ))
+    J12 = np.concatenate((Jv12_LF, Jv12_RH, Jv12_LH, Jv12_com, Jomega12_LF, Jomega12_eta ))
+    J12 = np.append(J12, Jomega12_eta)
+
     # --- Prawa ręka ---
 
     # kolumna 13 #
@@ -317,7 +323,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega13_LF = np.zeros((3,1))
     Jomega13_eta = 0
 
-    J13 = np.concatenate((Jv13_LF, Jv13_RH, Jv13_LH, Jv13_LF, Jv13_com, Jomega13_LF, Jomega13_eta ))
+    J13 = np.concatenate((Jv13_LF, Jv13_RH, Jv13_LH, Jv13_com, Jomega13_LF, Jomega13_eta ))
+    J13 = np.append(J13, Jomega13_eta)
 
 
     # kolumna 14 #
@@ -333,8 +340,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega14_LF = np.zeros((3,1))
     Jomega14_eta = 0
 
-    J14 = np.concatenate((Jv14_LF, Jv14_RH, Jv14_LH, Jv14_LF, Jv14_com, Jomega14_LF, Jomega14_eta ))
-
+    J14 = np.concatenate((Jv14_LF, Jv14_RH, Jv14_LH, Jv14_com, Jomega14_LF, Jomega14_eta ))
+    J14 = np.append(J14, Jomega14_eta)
 
     # kolumna 15 #
 
@@ -352,7 +359,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega15_LF = np.zeros((3,1))
     Jomega15_eta = 0
 
-    J15 = np.concatenate((Jv15_LF, Jv15_RH, Jv15_LH, Jv15_LF, Jv15_com, Jomega15_LF, Jomega15_eta ))
+    J15 = np.concatenate((Jv15_LF, Jv15_RH, Jv15_LH, Jv15_com, Jomega15_LF, Jomega15_eta ))
+    J15 = np.append(J15, Jomega15_eta)
 
     # --- Lewa ręka ---
 
@@ -373,7 +381,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega16_LF = np.zeros((3,1))
     Jomega16_eta = 0
 
-    J16 = np.concatenate((Jv16_LF, Jv16_RH, Jv16_LH, Jv16_LF, Jv16_com, Jomega16_LF, Jomega16_eta ))
+    J16 = np.concatenate((Jv16_LF, Jv16_RH, Jv16_LH, Jv16_com, Jomega16_LF, Jomega16_eta ))
+    J16 = np.append(J16, Jomega16_eta)
 
     # kolumna 17 #
 
@@ -390,7 +399,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega17_LF = np.zeros((3, 1))
     Jomega17_eta = 0
 
-    J17 = np.concatenate((Jv17_LF, Jv17_RH, Jv17_LH, Jv17_LF, Jv17_com, Jomega17_LF, Jomega17_eta ))
+    J17 = np.concatenate((Jv17_LF, Jv17_RH, Jv17_LH, Jv17_com, Jomega17_LF, Jomega17_eta ))
+    J17 = np.append(J17, Jomega17_eta)
 
     # Kolumna 18 #
 
@@ -408,7 +418,8 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega18_LF = np.zeros((3, 1))
     Jomega18_eta = 0
 
-    J18 = np.concatenate((Jv18_LF, Jv18_RH, Jv18_LH, Jv18_LF, Jv18_com, Jomega18_LF, Jomega18_eta ))
+    J18 = np.concatenate((Jv18_LF, Jv18_RH, Jv18_LH, Jv18_com, Jomega18_LF, Jomega18_eta ))
+    J18 = np.append(J18, Jomega18_eta)
 
     # --- Klatka piersiowa ---
 
@@ -436,11 +447,13 @@ def Jacobian(q,r_trajectory_vector,trajectory_vector):
     Jomega19_LF = np.zeros((3,1))
     Jomega19_eta = 0
 
-    J19 = np.concatenate((Jv19_LF, Jv19_RH, Jv19_LH, Jv19_LF, Jv19_com, Jomega19_LF, Jomega19_eta ))
+    J19 = np.concatenate((Jv19_LF, Jv19_RH, Jv19_LH, Jv19_com, Jomega19_LF, Jomega19_eta ))
+    J19 = np.append(J19, Jomega19_eta)
 
     J = np.column_stack(J1,J2,J3,J4,J5,J6,J7,J8,J9,J10,J11,J12,J13,J14,J15,J16,J17,J18,J19)
 
-    Ja = T @ J
+    # Ja = T @ J
 
-    return Ja
+    return J
 
+print(Jacobian([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]))
