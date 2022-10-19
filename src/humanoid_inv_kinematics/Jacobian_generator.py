@@ -102,17 +102,17 @@ def Jacobian(q,trajectory_vector):
     Jv1_LH = skew_matrix(u1_LH) @ d1_LH
     u1_com = u1_LF
     Jv1_com_prev = ( R_RF_W @ (-r_W_RT + r_com_W)*mW
-              + ( -R_RF_W @ (-r_W_RT+r_W_CH) +R_RF_CH @ r_com_CH) * mCH
-              + (-R_RF_W @ (-r_W_RT + r_W_CH) + R_RF_CH @ r_CH_RA + R_RF_RA @ r_com_RA) * mRA
+              + (R_RF_W @ (-r_W_RT+r_W_CH) +R_RF_CH @ r_com_CH) * mCH
+              + (R_RF_W @ (-r_W_RT + r_W_CH) + R_RF_CH @ r_CH_RA + R_RF_RA @ r_com_RA) * mRA
               + (d1_RH - R_RF_RFA @ (r_RFA_RH - r_com_RFA)) * mRFA
-              + (-R_RF_W @ (-r_W_RT + r_W_CH) + R_RF_CH @ r_CH_LA + R_RF_LA @ r_com_LA) * mLA
+              + (R_RF_W @ (-r_W_RT + r_W_CH) + R_RF_CH @ r_CH_LA + R_RF_LA @ r_com_LA) * mLA
               + (d1_LH - R_RF_LFA @ (r_LFA_LH - r_com_LFA)) * mLFA
               + (R_RF_W @ (-r_W_RT + r_W_LT) + R_RF_LT @ r_com_LT) * mLT
               + (R_RF_W @ (-r_W_RT + r_W_LT) + R_RF_LT @ r_LT_LS + R_RF_LS @ r_com_LS) * mLS
               + (d1_LF + R_RF_LF @ r_com_LF) * mLF)
     Jv1_com = (skew_matrix(u1_com) / TotalMas) @ Jv1_com_prev
     Jomega1_LF = u1_LF
-    Jomega1_eta = (1/(math.sqrt(1-R_0_W[2,0] ** 2)))*(R_0_RF @ np.transpose(OmegaZ @ R_W_RF))[2,0]
+    Jomega1_eta = -(1/(math.sqrt(1-R_0_W[2,0] ** 2)))*(R_0_RF @ np.transpose(OmegaZ @ R_W_RF))[2,0]
 
     J1 = np.concatenate([Jv1_LF, Jv1_RH, Jv1_LH, Jv1_com, Jomega1_LF])
     J1 = np.append(J1, Jomega1_eta)
@@ -130,7 +130,7 @@ def Jacobian(q,trajectory_vector):
     u2_com = u2_LF
     Jv2_com = ((skew_matrix(u2_com)) / TotalMas) @ Jv1_com_prev
     Jomega2_LF = u2_LF
-    Jomega2_eta = (1 / (math.sqrt(1-R_0_W[2, 0] ** 2))) * (R_0_RF @ np.transpose(kin.rotZ(RTz) @ OmegaX @ kin.rotX(RTx) @ kin.rotY(RTy) @ R_RT_RS @ R_RS_RF))[2, 0]
+    Jomega2_eta = -(1 / (math.sqrt(1-R_0_W[2, 0] ** 2))) * (R_0_RF @ np.transpose(kin.rotZ(RTz) @ OmegaX @ kin.rotX(RTx) @ kin.rotY(RTy) @ R_RT_RS @ R_RS_RF))[2, 0]
 
     J2 = np.concatenate((Jv2_LF, Jv2_RH, Jv2_LH, Jv2_com, Jomega2_LF))
     J2 = np.append(J2, Jomega2_eta)
@@ -148,7 +148,7 @@ def Jacobian(q,trajectory_vector):
     u3_com = u3_LF
     Jv3_com = ((skew_matrix(u3_com))/TotalMas) @ Jv1_com_prev
     Jomega3_LF = u3_LF
-    Jomega3_eta = (1 / (math.sqrt(1 - R_0_W[2, 0] ** 2))) * \
+    Jomega3_eta = -(1 / (math.sqrt(1 - R_0_W[2, 0] ** 2))) * \
                   (R_0_RF @ np.transpose(kin.rotZ(RTz) @ kin.rotX(RTx) @ OmegaY @ kin.rotY(RTy) @ R_RT_RS @ R_RS_RF))[2, 0]
 
     J3 = np.concatenate((Jv3_LF, Jv3_RH, Jv3_LH, Jv3_com, Jomega3_LF))
@@ -170,7 +170,7 @@ def Jacobian(q,trajectory_vector):
     Jv4_com_prev = (b*mRT + (-a) * (mW + mCH + mRA + mRFA + mLA + mLFA + mLT + mLS + mLF) + Jv1_com_prev)
     Jv4_com = ((skew_matrix(u4_com))/TotalMas) @ Jv4_com_prev
     Jomega4_LF = u4_LF
-    Jomega4_eta = (1 / (math.sqrt(1 - R_0_W[2, 0] ** 2))) * \
+    Jomega4_eta = -(1 / (math.sqrt(1 - R_0_W[2, 0] ** 2))) * \
                   (R_0_RF @ np.transpose(R_W_RT @ OmegaY @ R_RT_RS @ R_RS_RF))[2, 0]
 
     J4 = np.concatenate((Jv4_LF, Jv4_RH, Jv4_LH, Jv4_com, Jomega4_LF))
@@ -193,7 +193,7 @@ def Jacobian(q,trajectory_vector):
                 d * mRS + (-c) * (mRT + mW + mCH + mRA + mRFA + mLA + mLFA + mLT + mLS + mLF) + Jv4_com_prev)
     Jv5_com = ((skew_matrix(u5_com)) / TotalMas) @ Jv5_com_prev
     Jomega5_LF = u5_LF
-    Jomega5_eta = (1 / (math.sqrt(1 - R_0_W[2, 0] ** 2))) * \
+    Jomega5_eta = -(1 / (math.sqrt(1 - R_0_W[2, 0] ** 2))) * \
                   (R_0_RF @ np.transpose(R_W_RT @ R_RT_RS @ OmegaY @ R_RS_RF))[2, 0]
 
     J5 = np.concatenate((Jv5_LF, Jv5_RH, Jv5_LH, Jv5_com, Jomega5_LF))
@@ -204,7 +204,7 @@ def Jacobian(q,trajectory_vector):
     u6_LF = - Ux
     Jv6_LF = skew_matrix(u6_LF) @ d6_LF
     d6_RH = d5_RH
-    u6_RH = u5_LF
+    u6_RH = u6_LF
     Jv6_RH = skew_matrix(u6_RH) @ d6_RH
     d6_LH = d5_LH
     u6_LH = u6_LF
@@ -212,7 +212,7 @@ def Jacobian(q,trajectory_vector):
     u6_com = u6_LF
     Jv6_com = ((skew_matrix(u6_com))/TotalMas) @ Jv5_com_prev
     Jomega6_LF = u6_LF
-    Jomega6_eta = (1 / (math.sqrt(1 - R_0_W[2, 0] ** 2))) * \
+    Jomega6_eta = -(1 / (math.sqrt(1 - R_0_W[2, 0] ** 2))) * \
                   (R_0_RF @ np.transpose(R_W_RT @ R_RT_RS @ kin.rotY(RFy) @ OmegaX @ kin.rotX(RFx)))[2, 0]
 
     J6 = np.concatenate((Jv6_LF, Jv6_RH, Jv6_LH, Jv6_com, Jomega6_LF))
@@ -381,7 +381,7 @@ def Jacobian(q,trajectory_vector):
     Jv16_LH = skew_matrix(u16_LH) @ d16_LH
 
     u16_com = u16_LH
-    Jv16_com_prev = (R_RF_LA @ r_com_LA * mLFA)
+    Jv16_com_prev = (R_RF_LA @ r_com_LA * mLA + (R_RF_LA @ r_LA_LFA + R_RF_LFA @ r_com_LFA) * mLFA)
     Jv16_com = (skew_matrix(u16_com)/TotalMas) @ Jv16_com_prev
 
     Jomega16_LF = np.zeros((3,1))
@@ -447,7 +447,7 @@ def Jacobian(q,trajectory_vector):
     Jv19_com = (skew_matrix(u19_com)/TotalMas)@(R_RF_CH @ r_com_CH * mCH
                 + (R_RF_CH @ r_CH_RA + R_RF_RA @ r_com_RA) * mRA
                 + (R_RF_CH @ r_CH_RA + R_RF_RA @ r_RA_RFA + R_RF_RFA @ r_com_RFA) * mRFA
-                + (R_RF_CH @ r_CH_RA + R_RF_LA @ r_com_LA) * mLA
+                + (R_RF_CH @ r_CH_LA + R_RF_LA @ r_com_LA) * mLA
                 + (R_RF_CH @ r_CH_LA + R_RF_LA @ r_LA_LFA + R_RF_LFA @ r_com_LFA) * mLFA)
 
     Jomega19_LF = np.zeros((3,1))
