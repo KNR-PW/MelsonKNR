@@ -51,7 +51,7 @@ def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
 
 
 ## Plan phases
-#TODO: check num of steps. diff == 1 
+#TODO: check num of steps. diff == 1
 NumberOfDSPhases = 1 + gp.NumOfStepsLeftLeg + gp.NumOfStepsRightLeg
 NumberOfSSPhases = gp.NumOfStepsLeftLeg + gp.NumOfStepsRightLeg
 PhaseDivider = NumberOfDSPhases * gp.PARAM_DS + NumberOfSSPhases * gp.PARAM_SS
@@ -88,7 +88,7 @@ for TimeIter in gp.NumberOfTimeInstances:
                 WhichLegSupportingInSS = 'left'
             else:
                 WhichLegSupportingInSS = 'right'
-                
+
 ## Plan contact
 
 for TimeIter in gp.NumberOfTimeInstances:
@@ -104,7 +104,7 @@ for TimeIter in gp.NumberOfTimeInstances:
         con.CharPointsContactOnOff.LeftFootLeftHeel[TimeIter] = False
         con.CharPointsContactOnOff.LeftFootRightHeel[TimeIter] = False
         con.CharPointsContactOnOff.LeftFootCenter[TimeIter] = False
-    
+
     if con.GaitPhases.RightLeg[TimeIter] == 'support':
         con.CharPointsContactOnOff.RightFootLeftToes[TimeIter] = True
         con.CharPointsContactOnOff.RightFootRightToes[TimeIter] = True
@@ -284,4 +284,3 @@ for TimeIter in range(1, gp.NumberOfTimeInstances):
         con.GaitSupportPolygon.RightFootLeftHeel[:, TimeIter] = con.GaitEndPointsTrajectory.r_RF[:, TimeIter] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter] * mp.r_RF_left_heel
         con.GaitSupportPolygon.RightFootRightHeel[:, TimeIter] = con.GaitEndPointsTrajectory.r_RF[:, TimeIter] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter] * mp.r_RF_right_heel
         con.GaitSupportPolygon.RightFootCenter[:, TimeIter] = con.GaitEndPointsTrajectory.r_RF[:, TimeIter] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter] * mp.r_RF_center
-

@@ -29,14 +29,13 @@ def rotX(alpha):
 
 def DKS_LeftHand(mp, r_W, rot_W, q_ULL, fi_CH ):
     # Zadanie proste kinematyki dla kończyny górnej lewej
-    r_LH = r_W + np.matmul(rot_W, mp.r_W_CH + np.matmul(np.matmul(rotZ(fi_CH), mp.r_CH_LA + rotY(q_ULL(1))),
-                                                        np.matmul(rotX(q_ULL(2)), mp.r_LA_LFA + np.matmul(rotY(q_ULL(3)), mp.r_LFA_LH))))
+    r_LH = r_W + rot_W @ (mp.r_W_CH + rotZ(fi_CH) @ (mp.r_CH_LA + rotY(q_ULL[0]) @ rotX(q_ULL[1]) @ (mp.r_LA_LFA + rotY(q_ULL[2]) @ mp.r_LFA_LH)))
+
     return r_LH
 
 def DKS_RightHand(mp, r_W, rot_W, q_URL, fi_CH ):
     # Zadanie proste kinematyki dla kończyny górnej prawej
-    r_RH = r_W + np.matmul(rot_W, mp.r_W_CH + np.matmul(np.matmul(rotZ(fi_CH), mp.r_CH_RA + rotY(q_URL(1))),
-                                                        np.matmul(rotX(q_URL(2)), mp.r_RA_RFA + np.matmul(rotY(q_URL(3)), mp.r_RFA_RH))))
+    r_RH = r_W + rot_W @ (mp.r_W_CH + rotZ(fi_CH) @ (mp.r_CH_RA + rotY(q_URL[0]) @ rotX(q_URL[1]) @ (mp.r_RA_RFA + rotY(q_URL[2]) @ mp.r_RFA_RH)))
     return r_RH
 
 def IKS_Waist_LeftHand(mp, r_W_LH , fi_CH=0):
@@ -60,7 +59,7 @@ def IKS_Waist_LeftHand(mp, r_W_LH , fi_CH=0):
     # Długości członów
     l_LA = mp.r_LA_LFA[2]     #długość ramienia (ujemna!) wartość w 3-cim wierszu
     l_LFA = mp.r_LFA_LH[2]    #długość przedramienia (ujemna!) wartość w 3-cim wierszu
-
+    print((np.matmul(np.transpose(r), r) - l_LA**2 - l_LFA**2) / (2*l_LA*l_LFA))
     # Wyliczanie wartości wsp. złączowych
     fi_LFA = -math.acos((np.matmul(np.transpose(r), r) - l_LA**2 - l_LFA**2) / (2*l_LA*l_LFA))
     fi_LAx = math.asin(-r[1] / (l_LA + l_LFA*math.cos(fi_LFA)))

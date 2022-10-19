@@ -1,6 +1,5 @@
 import numpy as np
 
-#def LoadModelParameters():
 
 # Skrypt przechowujacy wymiary humanoida w postaci wektorowej
 
