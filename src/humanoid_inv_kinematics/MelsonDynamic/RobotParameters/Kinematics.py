@@ -67,14 +67,14 @@ def IKS_Waist_LeftHand(mp, r_W_LH , fi_CH=0):
     # Wyznaczenie fi_RAy
     # układ rónań liniowych:
 
-    A = np.array([[(l_LA + l_LFA*math.cos(fi_LFA)) * math.cos(fi_LAx), l_LFA*math.sin(fi_LFA)],
-                 [- l_LFA * math.sin(fi_LFA), (l_LFA * math.cos(fi_LFA) + l_LA) * math.cos(fi_LAx)]])
+    A = np.array([[(l_LA[0] + l_LFA[0]*math.cos(fi_LFA)) * math.cos(fi_LAx), l_LFA[0]*math.sin(fi_LFA)],
+                 [- l_LFA[0] * math.sin(fi_LFA), (l_LFA[0] * math.cos(fi_LFA) + l_LA[0]) * math.cos(fi_LAx)]])
 
     b = np.array([[r[0], r[2]]])
 
-    x = np.linalg.inv(A).dot(b)
+    x = np.linalg.inv(A) @ b
 
-    fi_LAy = math.atan2(x[0].real, x[1].real)
+    fi_LAy = math.atan2(x[0][0], x[0][1])
 
     # zbudowanie wektora wsp. złączowych
     q = np.array([fi_LAy, fi_LAx, fi_LFA])
@@ -109,14 +109,14 @@ def IKS_Waist_RightHand(mp, r_W_RH , fi_CH=0):
     # Wyznaczenie fi_RAy
     # układ rónań liniowych:
 
-    A = np.array([[(l_RA + l_RFA*math.cos(fi_RFA)) * math.cos(fi_RAx), l_RFA*math.sin(fi_RFA)],
-                 [- l_RFA * math.sin(fi_RFA), (l_RFA * math.cos(fi_RFA) + l_RA) * math.cos(fi_RAx)]])
+    A = np.array([[(l_RA[0] + l_RFA[0]*math.cos(fi_RFA)) * math.cos(fi_RAx), l_RFA[0]*math.sin(fi_RFA)],
+                 [- l_RFA[0] * math.sin(fi_RFA), (l_RFA[0] * math.cos(fi_RFA) + l_RA[0]) * math.cos(fi_RAx)]])
 
     b = np.array([[r[0], r[2]]])
 
-    x = np.linalg.inv(A).dot(b)
+    x = np.linalg.inv(A) @ b
 
-    fi_RAy = math.atan2(x[0].real, x[1].real)
+    fi_RAy = math.atan2(x[0][0], x[0][1])
 
     # zbudowanie wektora wsp. złączowych
     q = np.array([fi_RAy, fi_RAx, fi_RFA])
@@ -140,7 +140,6 @@ def IKS_Waist_LeftFoot(mp, r_W_LF_char_point, rot_W_LF=np.eye(3), r_LF_char_poin
     ## Obliczenia
 
     r = np.matmul(np.transpose(rot_W_LF), r_W_LF_char_point) - r_LF_char_point - np.matmul(np.transpose(rot_W_LF), mp.r_W_LT)
-
     fi_LS = math.acos((np.matmul(np.transpose(r), r) - l_LS**2 - l_LT**2) / (2*l_LS*l_LT))
 
     A = -l_LS - l_LT * math.cos(fi_LS)
@@ -225,6 +224,6 @@ def IKS_Global(mp, r_W, rot_W, r_LF, rot_LF, r_RF, rot_RF, r_LH, r_RH, fi_CH):
                                             rot_W.transpose() @ rot_LF, mp.r_LF_center)
     q_LowerRightLimb = IKS_Waist_RightFoot(mp, np.transpose(rot_W) @ (r_RF - r_W + np.transpose(rot_W) @ rot_RF @ mp.r_RF_center),
                                              np.transpose(rot_W) @ rot_RF, mp.r_RF_center)
-
-    q = np.array([q_LowerRightLimb, q_LowerLeftLimb, q_UpperRightLimb, q_UpperLeftLimb, fi_CH])
+    q = np.concatenate((q_LowerRightLimb, q_LowerLeftLimb, q_UpperRightLimb, q_UpperLeftLimb, ))
+    q = np.append(q, fi_CH)
     return q

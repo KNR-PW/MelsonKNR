@@ -41,7 +41,7 @@ rot_RF_final = rot_where_to_go @ np.eye(3)
 r_RF_final = r_where_to_go + rot_where_to_go @ (np.array([[0], [-42.8-gp.offset], [0]]) - mp.r_RF_center)
 
 rot_LF_final = rot_where_to_go @ np.eye(3)
-r_LF_final = r_where_to_go + rot_where_to_go * ( np.array([[0], [42.8+gp.offset], [0]]) - mp.r_LF_center)
+r_LF_final = r_where_to_go + rot_where_to_go @ ( np.array([[0], [42.8+gp.offset], [0]]) - mp.r_LF_center)
 
 r_W_final = r_where_to_go + np.array([[0], [0], [gp.StepPelvisHeight]])
 rot_W_final = rot_where_to_go * np.eye(3)
@@ -49,7 +49,7 @@ rot_W_final = rot_where_to_go * np.eye(3)
 r_LH_final = kin.DKS_LeftHand(mp, r_W_final, rot_W_final, np.multiply(np.array([0, 15, -45]), math.pi/180), 0)
 r_RH_final = kin.DKS_RightHand(mp, r_W_final, rot_W_final, np.multiply(np.array([0, -15, -45]), math.pi/180), 0)
 
-r_CoM_final = r_W_final + np.array([[0], [0], [mp.r_W_RT(3)]])  # FROM r_w_final and constant vector
+r_CoM_final = r_W_final + np.array([[0], [0], [mp.r_W_RT[2]]])  # FROM r_w_final and constant vector
 q_final = kin.IKS_Global(mp, r_W_final, rot_W_final, r_LF_final, rot_LF_final, r_RF_final, rot_RF_final, r_LH_final, r_RH_final, 0)
 
 ## Create structures and load initial and terminal conditions
