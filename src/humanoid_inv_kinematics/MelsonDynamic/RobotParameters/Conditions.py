@@ -78,16 +78,16 @@ CharPointsContactOnOff=SupportPolygon(np.zeros((1,gp.NumberOfTimeInstances)), np
 
 
 # Generate Initial condition
-GaitSupportPolygon.LeftFootLeftToes[:,[0]] = GaitEndPointsTrajectory.r_LF[:,[0]] + GaitEndPointsTrajectory.rot_LF[:,:,[0]] @ mp.r_LF_left_toe
-GaitSupportPolygon.LeftFootRightToes[:,[0]] = GaitEndPointsTrajectory.r_LF[:,[0]] + GaitEndPointsTrajectory.rot_LF[:,:,[0]] @ mp.r_LF_right_toe
-GaitSupportPolygon.LeftFootLeftHeel[:,[0]] = GaitEndPointsTrajectory.r_LF[:,[0]] + GaitEndPointsTrajectory.rot_LF[:,:,[0]] @ mp.r_LF_left_heel
-GaitSupportPolygon.LeftFootRightHeel[:,[0]] = GaitEndPointsTrajectory.r_LF[:,[0]] + GaitEndPointsTrajectory.rot_LF[:,:,[0]] @ mp.r_LF_right_heel
-GaitSupportPolygon.LeftFootCenter[:,[0]] = GaitEndPointsTrajectory.r_LF[:,[0]] + GaitEndPointsTrajectory.rot_LF[:,:,[0]] @ mp.r_LF_center
-GaitSupportPolygon.RightFootLeftToes[:,[0]] = GaitEndPointsTrajectory.r_RF[:,[0]] + GaitEndPointsTrajectory.rot_RF[:,:,[0]] @ mp.r_RF_left_toe
-GaitSupportPolygon.RightFootRightToes[:,[0]] = GaitEndPointsTrajectory.r_RF[:,[0]] + GaitEndPointsTrajectory.rot_RF[:,:,[0]] @ mp.r_RF_right_toe
-GaitSupportPolygon.RightFootLeftHeel[:,[0]] = GaitEndPointsTrajectory.r_RF[:,[0]] + GaitEndPointsTrajectory.rot_RF[:,:,[0]] @ mp.r_RF_left_heel
-GaitSupportPolygon.RightFootRightHeel[:,[0]] = GaitEndPointsTrajectory.r_RF[:,[0]] + GaitEndPointsTrajectory.rot_RF[:,:,[0]] @ mp.r_RF_right_heel
-GaitSupportPolygon.RightFootCenter[:,[0]] = GaitEndPointsTrajectory.r_RF[:,[0]] + GaitEndPointsTrajectory.rot_RF[:,:,[0]] @ mp.r_RF_center
+GaitSupportPolygon.LeftFootLeftToes[:,[0]] = GaitEndPointsTrajectory.r_LF[:,[0]] + GaitEndPointsTrajectory.rot_LF[:,:,0] @ mp.r_LF_left_toe
+GaitSupportPolygon.LeftFootRightToes[:,[0]] = GaitEndPointsTrajectory.r_LF[:,[0]] + GaitEndPointsTrajectory.rot_LF[:,:,0] @ mp.r_LF_right_toe
+GaitSupportPolygon.LeftFootLeftHeel[:,[0]] = GaitEndPointsTrajectory.r_LF[:,[0]] + GaitEndPointsTrajectory.rot_LF[:,:,0] @ mp.r_LF_left_heel
+GaitSupportPolygon.LeftFootRightHeel[:,[0]] = GaitEndPointsTrajectory.r_LF[:,[0]] + GaitEndPointsTrajectory.rot_LF[:,:,0] @ mp.r_LF_right_heel
+GaitSupportPolygon.LeftFootCenter[:,[0]] = GaitEndPointsTrajectory.r_LF[:,[0]] + GaitEndPointsTrajectory.rot_LF[:,:,0] @ mp.r_LF_center
+GaitSupportPolygon.RightFootLeftToes[:,[0]] = GaitEndPointsTrajectory.r_RF[:,[0]] + GaitEndPointsTrajectory.rot_RF[:,:,0] @ mp.r_RF_left_toe
+GaitSupportPolygon.RightFootRightToes[:,[0]] = GaitEndPointsTrajectory.r_RF[:,[0]] + GaitEndPointsTrajectory.rot_RF[:,:,0] @ mp.r_RF_right_toe
+GaitSupportPolygon.RightFootLeftHeel[:,[0]] = GaitEndPointsTrajectory.r_RF[:,[0]] + GaitEndPointsTrajectory.rot_RF[:,:,0] @ mp.r_RF_left_heel
+GaitSupportPolygon.RightFootRightHeel[:,[0]] = GaitEndPointsTrajectory.r_RF[:,[0]] + GaitEndPointsTrajectory.rot_RF[:,:,0] @ mp.r_RF_right_heel
+GaitSupportPolygon.RightFootCenter[:,[0]] = GaitEndPointsTrajectory.r_RF[:,[0]] + GaitEndPointsTrajectory.rot_RF[:,:,0] @ mp.r_RF_center
 
 CharPointsContactOnOff.LeftFootLeftToes[0] = True
 CharPointsContactOnOff.LeftFootRightToes[0] = True
@@ -146,44 +146,44 @@ GaitPhases.RightLeg[0] = "support"
 ##TODO: zobaczyc czemu zakomentowane \/ \/ \/
 
 ## End Points Position (and orientation)
-GaitEndPointsTrajectory.r_W[:,gp.NumberOfTimeInstances] = lp.r_W_final
-GaitEndPointsTrajectory.rot_W[:,:,gp.NumberOfTimeInstances] = lp.rot_W_final
-GaitEndPointsTrajectory.r_RF[:,gp.NumberOfTimeInstances] = lp.r_W_final + lp.rot_W_final @ ( mp.r_W_RT +  kin.rotZ(lp.q_final[0]) @ kin.rotX(lp.q_final[1]) @ kin.rotY(lp.q_final[2]) @ ( mp.r_RT_RS + kin.rotY(lp.q_final[3]) @ (mp.r_RS_RF) ) )
-GaitEndPointsTrajectory.rot_RF[:,:,gp.NumberOfTimeInstances] = lp.rot_W_final @ kin.rotZ(lp.q_final[0]) @ kin.rotX(lp.q_final[1]) @ kin.rotY(lp.q_final[2]) @ kin.rotY(lp.q_final[3]) @ kin.rotY(lp.q_final[4]) @ kin.rotX(lp.q_final[5])
-GaitEndPointsTrajectory.r_LF[:,gp.NumberOfTimeInstances] = lp.r_W_final + lp.rot_W_final @ ( mp.r_W_LT +  kin.rotZ(lp.q_final[6]) @ kin.rotX(lp.q_final[7]) @ kin.rotY(lp.q_final[8]) @ ( mp.r_LT_LS + kin.rotY(lp.q_final[9]) @ (mp.r_LS_LF) ) )
-GaitEndPointsTrajectory.rot_LF[:,:,gp.NumberOfTimeInstances] = lp.rot_W_final @ kin.rotZ(lp.q_final[6]) @ kin.rotX(lp.q_final[7]) @ kin.rotY(lp.q_final[8]) @ kin.rotY(lp.q_final[9]) @ kin.rotY(lp.q_final[10]) @ kin.rotX(lp.q_final[11])
-GaitEndPointsTrajectory.r_LH[:,gp.NumberOfTimeInstances] = lp.r_W_final + lp.rot_W_final @ (mp.r_W_CH + kin.rotZ(lp.q_final[18]) @ (mp.r_CH_LA + kin.rotY(lp.q_final[15]) @ kin.rotX(lp.q_final[16]) @ (mp.r_LA_LFA + kin.rotY(lp.q_final[17]) @ mp.r_LFA_LH)))
+GaitEndPointsTrajectory.r_W[:,[gp.NumberOfTimeInstances-1]] = lp.r_W_final
+GaitEndPointsTrajectory.rot_W[:,:,[gp.NumberOfTimeInstances-1]] = lp.rot_W_final[:,:,np.newaxis]
+GaitEndPointsTrajectory.r_RF[:,[gp.NumberOfTimeInstances-1]] = lp.r_W_final + lp.rot_W_final @ ( mp.r_W_RT +  kin.rotZ(lp.q_final[0]) @ kin.rotX(lp.q_final[1]) @ kin.rotY(lp.q_final[2]) @ ( mp.r_RT_RS + kin.rotY(lp.q_final[3]) @ (mp.r_RS_RF) ) )
+GaitEndPointsTrajectory.rot_RF[:,:,[gp.NumberOfTimeInstances-1]] = (lp.rot_W_final @ kin.rotZ(lp.q_final[0]) @ kin.rotX(lp.q_final[1]) @ kin.rotY(lp.q_final[2]) @ kin.rotY(lp.q_final[3]) @ kin.rotY(lp.q_final[4]) @ kin.rotX(lp.q_final[5]))[:,:,np.newaxis]
+GaitEndPointsTrajectory.r_LF[:,[gp.NumberOfTimeInstances-1]] = lp.r_W_final + lp.rot_W_final @ ( mp.r_W_LT +  kin.rotZ(lp.q_final[6]) @ kin.rotX(lp.q_final[7]) @ kin.rotY(lp.q_final[8]) @ ( mp.r_LT_LS + kin.rotY(lp.q_final[9]) @ (mp.r_LS_LF) ) )
+GaitEndPointsTrajectory.rot_LF[:,:,[gp.NumberOfTimeInstances-1]] = (lp.rot_W_final @ kin.rotZ(lp.q_final[6]) @ kin.rotX(lp.q_final[7]) @ kin.rotY(lp.q_final[8]) @ kin.rotY(lp.q_final[9]) @ kin.rotY(lp.q_final[10]) @ kin.rotX(lp.q_final[11]))[:,:,np.newaxis]
+GaitEndPointsTrajectory.r_LH[:,[gp.NumberOfTimeInstances-1]] = lp.r_W_final + lp.rot_W_final @ (mp.r_W_CH + kin.rotZ(lp.q_final[18]) @ (mp.r_CH_LA + kin.rotY(lp.q_final[15]) @ kin.rotX(lp.q_final[16]) @ (mp.r_LA_LFA + kin.rotY(lp.q_final[17]) @ mp.r_LFA_LH)))
 #GaitEndPointsTrajectory.rot_LH[:,:,0] =
-GaitEndPointsTrajectory.r_RH[:,gp.NumberOfTimeInstances] = lp.r_W_final + lp.rot_W_final @ (mp.r_W_CH + kin.rotZ(lp.q_final[18]) @ (mp.r_CH_RA + kin.rotY(lp.q_final[12]) @ kin.rotX(lp.q_final[13]) @ (mp.r_RA_RFA + kin.rotY(lp.q_final[14]) @ mp.r_RFA_RH)))
+GaitEndPointsTrajectory.r_RH[:,[gp.NumberOfTimeInstances-1]] = lp.r_W_final + lp.rot_W_final @ (mp.r_W_CH + kin.rotZ(lp.q_final[18]) @ (mp.r_CH_RA + kin.rotY(lp.q_final[12]) @ kin.rotX(lp.q_final[13]) @ (mp.r_RA_RFA + kin.rotY(lp.q_final[14]) @ mp.r_RFA_RH)))
 #GaitEndPointsTrajectory.rot_RH[:,:,0] =
 
 ## Support Polygon
-GaitSupportPolygon.LeftFootLeftToes[:,gp.NumberOfTimeInstances] = GaitEndPointsTrajectory.r_LF[:,gp.NumberOfTimeInstances] + GaitEndPointsTrajectory.rot_LF[:,:,gp.NumberOfTimeInstances] @ mp.r_LF_left_toe
-GaitSupportPolygon.LeftFootRightToes[:,gp.NumberOfTimeInstances] = GaitEndPointsTrajectory.r_LF[:,gp.NumberOfTimeInstances] + GaitEndPointsTrajectory.rot_LF[:,:,gp.NumberOfTimeInstances] @ mp.r_LF_right_toe
-GaitSupportPolygon.LeftFootLeftHeel[:,gp.NumberOfTimeInstances] = GaitEndPointsTrajectory.r_LF[:,gp.NumberOfTimeInstances] + GaitEndPointsTrajectory.rot_LF[:,:,gp.NumberOfTimeInstances] @ mp.r_LF_left_heel
-GaitSupportPolygon.LeftFootRightHeel[:,gp.NumberOfTimeInstances] = GaitEndPointsTrajectory.r_LF[:,gp.NumberOfTimeInstances] + GaitEndPointsTrajectory.rot_LF[:,:,gp.NumberOfTimeInstances] @ mp.r_LF_right_heel
-GaitSupportPolygon.LeftFootCenter[:,gp.NumberOfTimeInstances] = GaitEndPointsTrajectory.r_LF[:,gp.NumberOfTimeInstances] + GaitEndPointsTrajectory.rot_LF[:,:,gp.NumberOfTimeInstances] @ mp.r_LF_center
-GaitSupportPolygon.RightFootLeftToes[:,gp.NumberOfTimeInstances] = GaitEndPointsTrajectory.r_RF[:,gp.NumberOfTimeInstances] + GaitEndPointsTrajectory.rot_RF[:,:,gp.NumberOfTimeInstances] @ mp.r_RF_left_toe
-GaitSupportPolygon.RightFootRightToes[:,gp.NumberOfTimeInstances] = GaitEndPointsTrajectory.r_RF[:,gp.NumberOfTimeInstances] + GaitEndPointsTrajectory.rot_RF[:,:,gp.NumberOfTimeInstances] @ mp.r_RF_right_toe
-GaitSupportPolygon.RightFootLeftHeel[:,gp.NumberOfTimeInstances] = GaitEndPointsTrajectory.r_RF[:,gp.NumberOfTimeInstances] + GaitEndPointsTrajectory.rot_RF[:,:,gp.NumberOfTimeInstances] @ mp.r_RF_left_heel
-GaitSupportPolygon.RightFootRightHeel[:,gp.NumberOfTimeInstances] = GaitEndPointsTrajectory.r_RF[:,gp.NumberOfTimeInstances] + GaitEndPointsTrajectory.rot_RF[:,:,gp.NumberOfTimeInstances] @ mp.r_RF_right_heel
-GaitSupportPolygon.RightFootCenter[:,gp.NumberOfTimeInstances] = GaitEndPointsTrajectory.r_RF[:,gp.NumberOfTimeInstances] + GaitEndPointsTrajectory.rot_RF[:,:,gp.NumberOfTimeInstances] @ mp.r_RF_center
+GaitSupportPolygon.LeftFootLeftToes[:,[gp.NumberOfTimeInstances-1]] = GaitEndPointsTrajectory.r_LF[:,[gp.NumberOfTimeInstances-1]] + GaitEndPointsTrajectory.rot_LF[:,:,gp.NumberOfTimeInstances-1] @ mp.r_LF_left_toe
+GaitSupportPolygon.LeftFootRightToes[:,[gp.NumberOfTimeInstances-1]] = GaitEndPointsTrajectory.r_LF[:,[gp.NumberOfTimeInstances-1]] + GaitEndPointsTrajectory.rot_LF[:,:,gp.NumberOfTimeInstances-1] @ mp.r_LF_right_toe
+GaitSupportPolygon.LeftFootLeftHeel[:,[gp.NumberOfTimeInstances-1]] = GaitEndPointsTrajectory.r_LF[:,[gp.NumberOfTimeInstances-1]] + GaitEndPointsTrajectory.rot_LF[:,:,gp.NumberOfTimeInstances-1] @ mp.r_LF_left_heel
+GaitSupportPolygon.LeftFootRightHeel[:,[gp.NumberOfTimeInstances-1]] = GaitEndPointsTrajectory.r_LF[:,[gp.NumberOfTimeInstances-1]] + GaitEndPointsTrajectory.rot_LF[:,:,gp.NumberOfTimeInstances-1] @ mp.r_LF_right_heel
+GaitSupportPolygon.LeftFootCenter[:,[gp.NumberOfTimeInstances-1]] = GaitEndPointsTrajectory.r_LF[:,[gp.NumberOfTimeInstances-1]] + GaitEndPointsTrajectory.rot_LF[:,:,gp.NumberOfTimeInstances-1] @ mp.r_LF_center
+GaitSupportPolygon.RightFootLeftToes[:,[gp.NumberOfTimeInstances-1]] = GaitEndPointsTrajectory.r_RF[:,[gp.NumberOfTimeInstances-1]] + GaitEndPointsTrajectory.rot_RF[:,:,gp.NumberOfTimeInstances-1] @ mp.r_RF_left_toe
+GaitSupportPolygon.RightFootRightToes[:,[gp.NumberOfTimeInstances-1]] = GaitEndPointsTrajectory.r_RF[:,[gp.NumberOfTimeInstances-1]] + GaitEndPointsTrajectory.rot_RF[:,:,gp.NumberOfTimeInstances-1] @ mp.r_RF_right_toe
+GaitSupportPolygon.RightFootLeftHeel[:,[gp.NumberOfTimeInstances-1]] = GaitEndPointsTrajectory.r_RF[:,[gp.NumberOfTimeInstances-1]] + GaitEndPointsTrajectory.rot_RF[:,:,gp.NumberOfTimeInstances-1] @ mp.r_RF_left_heel
+GaitSupportPolygon.RightFootRightHeel[:,[gp.NumberOfTimeInstances-1]] = GaitEndPointsTrajectory.r_RF[:,[gp.NumberOfTimeInstances-1]] + GaitEndPointsTrajectory.rot_RF[:,:,gp.NumberOfTimeInstances-1] @ mp.r_RF_right_heel
+GaitSupportPolygon.RightFootCenter[:,[gp.NumberOfTimeInstances-1]] = GaitEndPointsTrajectory.r_RF[:,[gp.NumberOfTimeInstances-1]] + GaitEndPointsTrajectory.rot_RF[:,:,gp.NumberOfTimeInstances-1] @ mp.r_RF_center
 
 
-CharPointsContactOnOff.LeftFootLeftToes[gp.NumberOfTimeInstances] = True
-CharPointsContactOnOff.LeftFootRightToes[gp.NumberOfTimeInstances] = True
-CharPointsContactOnOff.LeftFootLeftHeel[gp.NumberOfTimeInstances] = True
-CharPointsContactOnOff.LeftFootRightHeel[gp.NumberOfTimeInstances] = True
-CharPointsContactOnOff.LeftFootCenter[gp.NumberOfTimeInstances] = True
-CharPointsContactOnOff.RightFootLeftToes[gp.NumberOfTimeInstances] = True
-CharPointsContactOnOff.RightFootRightToes[gp.NumberOfTimeInstances] = True
-CharPointsContactOnOff.RightFootLeftHeel[gp.NumberOfTimeInstances] = True
-CharPointsContactOnOff.RightFootRightHeel[gp.NumberOfTimeInstances] = True
-CharPointsContactOnOff.RightFootCenter[gp.NumberOfTimeInstances] = True
+CharPointsContactOnOff.LeftFootLeftToes[0][gp.NumberOfTimeInstances-1] = True
+CharPointsContactOnOff.LeftFootRightToes[0][gp.NumberOfTimeInstances-1] = True
+CharPointsContactOnOff.LeftFootLeftHeel[0][gp.NumberOfTimeInstances-1] = True
+CharPointsContactOnOff.LeftFootRightHeel[0][gp.NumberOfTimeInstances-1] = True
+CharPointsContactOnOff.LeftFootCenter[0][gp.NumberOfTimeInstances-1] = True
+CharPointsContactOnOff.RightFootLeftToes[0][gp.NumberOfTimeInstances-1] = True
+CharPointsContactOnOff.RightFootRightToes[0][gp.NumberOfTimeInstances-1] = True
+CharPointsContactOnOff.RightFootLeftHeel[0][gp.NumberOfTimeInstances-1] = True
+CharPointsContactOnOff.RightFootRightHeel[0][gp.NumberOfTimeInstances-1] = True
+CharPointsContactOnOff.RightFootCenter[0][gp.NumberOfTimeInstances-1] = True
 
 ## Center of Mass Position
-GaitCoMTrajectory[:,gp.NumberOfTimeInstances] = lp.r_CoM_final
+GaitCoMTrajectory[:,[gp.NumberOfTimeInstances-1]] = lp.r_CoM_final
 
 ## Gait phases
-GaitPhases.LeftLeg[gp.NumberOfTimeInstances] = 'support'
-GaitPhases.RightLeg[gp.NumberOfTimeInstances] = 'support'
+GaitPhases.LeftLeg[0][gp.NumberOfTimeInstances-1] = 'support'
+GaitPhases.RightLeg[0][gp.NumberOfTimeInstances-1] = 'support'

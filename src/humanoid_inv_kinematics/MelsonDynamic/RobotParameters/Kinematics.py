@@ -59,7 +59,6 @@ def IKS_Waist_LeftHand(mp, r_W_LH , fi_CH=0):
     # Długości członów
     l_LA = mp.r_LA_LFA[2]     #długość ramienia (ujemna!) wartość w 3-cim wierszu
     l_LFA = mp.r_LFA_LH[2]    #długość przedramienia (ujemna!) wartość w 3-cim wierszu
-    print((np.matmul(np.transpose(r), r) - l_LA**2 - l_LFA**2) / (2*l_LA*l_LFA))
     # Wyliczanie wartości wsp. złączowych
     fi_LFA = -math.acos((np.matmul(np.transpose(r), r) - l_LA**2 - l_LFA**2) / (2*l_LA*l_LFA))
     fi_LAx = math.asin(-r[1] / (l_LA + l_LFA*math.cos(fi_LFA)))

@@ -29,7 +29,7 @@ rot_W_start = np.eye(3)
 r_LH_start = kin.DKS_LeftHand(mp, r_W_start, rot_W_start, np.array([0, 15, -45]) * math.pi/180, 0)
 r_RH_start = kin.DKS_RightHand(mp, r_W_start, rot_W_start, np.array([0, -15, -45]) * math.pi/180, 0)
 
-r_CoM_start = r_W_start + np.array([[0], [0], [mp.r_W_RT[2]]])     # FROM r_w_o and constant vector
+r_CoM_start = r_W_start + np.array([[0], [0], [mp.r_W_RT[2]]], dtype=object)     # FROM r_w_o and constant vector
 q_start = kin.IKS_Global(mp, r_W_start, rot_W_start, r_LF_start, rot_LF_start, r_RF_start, rot_RF_start, r_LH_start, r_RH_start, 0)  # IKS for xxx_0
 
 # Where robot ends:
@@ -49,7 +49,7 @@ rot_W_final = rot_where_to_go * np.eye(3)
 r_LH_final = kin.DKS_LeftHand(mp, r_W_final, rot_W_final, np.multiply(np.array([0, 15, -45]), math.pi/180), 0)
 r_RH_final = kin.DKS_RightHand(mp, r_W_final, rot_W_final, np.multiply(np.array([0, -15, -45]), math.pi/180), 0)
 
-r_CoM_final = r_W_final + np.array([[0], [0], [mp.r_W_RT[2]]])  # FROM r_w_final and constant vector
+r_CoM_final = r_W_final + np.array([[0], [0], [mp.r_W_RT[2]]], dtype=object)  # FROM r_w_final and constant vector
 q_final = kin.IKS_Global(mp, r_W_final, rot_W_final, r_LF_final, rot_LF_final, r_RF_final, rot_RF_final, r_LH_final, r_RH_final, 0)
 
 ## Create structures and load initial and terminal conditions
