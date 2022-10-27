@@ -78,9 +78,7 @@ for TimeIter in range(gp.NumberOfTimeInstances):
             con.GaitPhases.LeftLeg[0][TimeIter] = 'support'
             con.GaitPhases.RightLeg[0][TimeIter] = 'transfer'
 
-
-
-    if TimeIter > gp.NumberOfTimeInstances * ( gp.PARAM_DS * round((1+PhaseNumber)/2) + gp.PARAM_SS * round((PhaseNumber)/2)) / PhaseDivider:
+    if TimeIter > gp.NumberOfTimeInstances * (gp.PARAM_DS * math.floor((1+PhaseNumber)/2) + gp.PARAM_SS * math.floor(PhaseNumber/2)) / PhaseDivider:
         PhaseNumber = PhaseNumber + 1
         if WhichPhase == 'DS':
             WhichPhase = 'SS'
@@ -212,7 +210,7 @@ for TimeIter in range(gp.NumberOfTimeInstances):
         con.GaitEndPointsTrajectory.r_LF[:, TimeIter-1] = r_LeftFootOnGround[:,PhaseNumberLeftFoot-1]
         con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter-1] = GetRotMFromAnglesCB(anglesCB_LeftFootOnGround[:, PhaseNumberLeftFoot-1])
         if TimeIter < gp.NumberOfTimeInstances:
-            if con.GaitPhases.LeftLeg[0][TimeIter-1] == 'transfer':
+            if con.GaitPhases.LeftLeg[0][TimeIter] == 'transfer':
                 PhaseNumberLeftFoot = PhaseNumberLeftFoot + 1
 
     if con.GaitPhases.RightLeg[0][TimeIter-1] == 'support':
@@ -285,7 +283,7 @@ for TimeIter in range(gp.NumberOfTimeInstances):
         con.GaitSupportPolygon.RightFootLeftHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_left_heel
         con.GaitSupportPolygon.RightFootRightHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_right_heel
         con.GaitSupportPolygon.RightFootCenter[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_center
-
+    a = 2
 def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
 
     tstart = 0
