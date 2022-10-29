@@ -53,7 +53,6 @@ def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
 
 
 ## Plan phases
-#TODO: check num of steps. diff == 1 
 NumberOfDSPhases = 1 + gp.NumOfStepsLeftLeg + gp.NumOfStepsRightLeg
 NumberOfSSPhases = gp.NumOfStepsLeftLeg + gp.NumOfStepsRightLeg
 PhaseDivider = NumberOfDSPhases * gp.PARAM_DS + NumberOfSSPhases * gp.PARAM_SS
@@ -78,7 +77,7 @@ for TimeIter in range(gp.NumberOfTimeInstances):
             con.GaitPhases.LeftLeg[0][TimeIter] = 'support'
             con.GaitPhases.RightLeg[0][TimeIter] = 'transfer'
 
-    if TimeIter > gp.NumberOfTimeInstances * (gp.PARAM_DS * math.floor((1+PhaseNumber)/2) + gp.PARAM_SS * math.floor(PhaseNumber/2)) / PhaseDivider:
+    if TimeIter > (gp.NumberOfTimeInstances-1) * (gp.PARAM_DS * math.floor((1+PhaseNumber)/2) + gp.PARAM_SS * math.floor(PhaseNumber/2)) / PhaseDivider:
         PhaseNumber = PhaseNumber + 1
         if WhichPhase == 'DS':
             WhichPhase = 'SS'
