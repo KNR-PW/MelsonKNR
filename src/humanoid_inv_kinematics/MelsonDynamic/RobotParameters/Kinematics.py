@@ -29,14 +29,13 @@ def rotX(alpha):
 
 def DKS_LeftHand(mp, r_W, rot_W, q_ULL, fi_CH ):
     # Zadanie proste kinematyki dla kończyny górnej lewej
-    r_LH = r_W + np.matmul(rot_W, mp.r_W_CH + np.matmul(np.matmul(rotZ(fi_CH), mp.r_CH_LA + rotY(q_ULL(1))),
-                                                        np.matmul(rotX(q_ULL(2)), mp.r_LA_LFA + np.matmul(rotY(q_ULL(3)), mp.r_LFA_LH))))
+    r_LH = r_W + rot_W @ (mp.r_W_CH + rotZ(fi_CH) @ (mp.r_CH_LA + rotY(q_ULL[0]) @ rotX(q_ULL[1]) @ (mp.r_LA_LFA + rotY(q_ULL[2]) @ mp.r_LFA_LH)))
+
     return r_LH
 
 def DKS_RightHand(mp, r_W, rot_W, q_URL, fi_CH ):
     # Zadanie proste kinematyki dla kończyny górnej prawej
-    r_RH = r_W + np.matmul(rot_W, mp.r_W_CH + np.matmul(np.matmul(rotZ(fi_CH), mp.r_CH_RA + rotY(q_URL(1))),
-                                                        np.matmul(rotX(q_URL(2)), mp.r_RA_RFA + np.matmul(rotY(q_URL(3)), mp.r_RFA_RH))))
+    r_RH = r_W + rot_W @ (mp.r_W_CH + rotZ(fi_CH) @ (mp.r_CH_RA + rotY(q_URL[0]) @ rotX(q_URL[1]) @ (mp.r_RA_RFA + rotY(q_URL[2]) @ mp.r_RFA_RH)))
     return r_RH
 
 def IKS_Waist_LeftHand(mp, r_W_LH , fi_CH=0):
@@ -60,7 +59,6 @@ def IKS_Waist_LeftHand(mp, r_W_LH , fi_CH=0):
     # Długości członów
     l_LA = mp.r_LA_LFA[2]     #długość ramienia (ujemna!) wartość w 3-cim wierszu
     l_LFA = mp.r_LFA_LH[2]    #długość przedramienia (ujemna!) wartość w 3-cim wierszu
-
     # Wyliczanie wartości wsp. złączowych
     fi_LFA = -math.acos((np.matmul(np.transpose(r), r) - l_LA**2 - l_LFA**2) / (2*l_LA*l_LFA))
     fi_LAx = math.asin(-r[1] / (l_LA + l_LFA*math.cos(fi_LFA)))
@@ -68,14 +66,14 @@ def IKS_Waist_LeftHand(mp, r_W_LH , fi_CH=0):
     # Wyznaczenie fi_RAy
     # układ rónań liniowych:
 
-    A = np.array([[(l_LA + l_LFA*math.cos(fi_LFA)) * math.cos(fi_LAx), l_LFA*math.sin(fi_LFA)],
-                 [- l_LFA * math.sin(fi_LFA), (l_LFA * math.cos(fi_LFA) + l_LA) * math.cos(fi_LAx)]])
+    A = np.array([[(l_LA[0] + l_LFA[0]*math.cos(fi_LFA)) * math.cos(fi_LAx), l_LFA[0]*math.sin(fi_LFA)],
+                 [- l_LFA[0] * math.sin(fi_LFA), (l_LFA[0] * math.cos(fi_LFA) + l_LA[0]) * math.cos(fi_LAx)]])
 
     b = np.array([[r[0], r[2]]])
 
-    x = np.linalg.inv(A).dot(b)
+    x = np.linalg.inv(A) @ b
 
-    fi_LAy = math.atan2(x[0].real, x[1].real)
+    fi_LAy = math.atan2(x[0][0], x[0][1])
 
     # zbudowanie wektora wsp. złączowych
     q = np.array([fi_LAy, fi_LAx, fi_LFA])
@@ -110,14 +108,14 @@ def IKS_Waist_RightHand(mp, r_W_RH , fi_CH=0):
     # Wyznaczenie fi_RAy
     # układ rónań liniowych:
 
-    A = np.array([[(l_RA + l_RFA*math.cos(fi_RFA)) * math.cos(fi_RAx), l_RFA*math.sin(fi_RFA)],
-                 [- l_RFA * math.sin(fi_RFA), (l_RFA * math.cos(fi_RFA) + l_RA) * math.cos(fi_RAx)]])
+    A = np.array([[(l_RA[0] + l_RFA[0]*math.cos(fi_RFA)) * math.cos(fi_RAx), l_RFA[0]*math.sin(fi_RFA)],
+                 [- l_RFA[0] * math.sin(fi_RFA), (l_RFA[0] * math.cos(fi_RFA) + l_RA[0]) * math.cos(fi_RAx)]])
 
     b = np.array([[r[0], r[2]]])
 
-    x = np.linalg.inv(A).dot(b)
+    x = np.linalg.inv(A) @ b
 
-    fi_RAy = math.atan2(x[0].real, x[1].real)
+    fi_RAy = math.atan2(x[0][0], x[0][1])
 
     # zbudowanie wektora wsp. złączowych
     q = np.array([fi_RAy, fi_RAx, fi_RFA])
@@ -141,7 +139,6 @@ def IKS_Waist_LeftFoot(mp, r_W_LF_char_point, rot_W_LF=np.eye(3), r_LF_char_poin
     ## Obliczenia
 
     r = np.matmul(np.transpose(rot_W_LF), r_W_LF_char_point) - r_LF_char_point - np.matmul(np.transpose(rot_W_LF), mp.r_W_LT)
-
     fi_LS = math.acos((np.matmul(np.transpose(r), r) - l_LS**2 - l_LT**2) / (2*l_LS*l_LT))
 
     A = -l_LS - l_LT * math.cos(fi_LS)
@@ -226,6 +223,6 @@ def IKS_Global(mp, r_W, rot_W, r_LF, rot_LF, r_RF, rot_RF, r_LH, r_RH, fi_CH):
                                             rot_W.transpose() @ rot_LF, mp.r_LF_center)
     q_LowerRightLimb = IKS_Waist_RightFoot(mp, np.transpose(rot_W) @ (r_RF - r_W + np.transpose(rot_W) @ rot_RF @ mp.r_RF_center),
                                              np.transpose(rot_W) @ rot_RF, mp.r_RF_center)
-
-    q = np.array([q_LowerRightLimb, q_LowerLeftLimb, q_UpperRightLimb, q_UpperLeftLimb, fi_CH])
+    q = np.concatenate((q_LowerRightLimb, q_LowerLeftLimb, q_UpperRightLimb, q_UpperLeftLimb, ))
+    q = np.append(q, fi_CH)
     return q
