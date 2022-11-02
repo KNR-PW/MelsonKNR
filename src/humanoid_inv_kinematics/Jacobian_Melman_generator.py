@@ -11,8 +11,8 @@ from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters i
 # Praca oparta podstawie dokumentu "Jakobian Melsona"
 
 # Budowa wektora wspolrzednych zlaczowych:
-# q = [q(1); q(2); q(3); q(4); q(5); q(6); q(7); q(8); q(9); q(10); q(11); q(12); q(13); q(14); q(15); q(16); q(17); q(18); q(19)]
-# q = [RTz;  RTx;  RTy;  RSy;  RFy;  RFx;  LTz;  LTx;  LTy;  LSy;   LFy;   LFx;   RAy;   RAx;   RFAy;  LAy;   LAx;   LFAy;  CHz]
+# q = [q(1); q(2); q(3); q(4); q(5); q(6); q(7); q(8); q(9); q(10); q(11); q(12); q(13); q(14); q(15); q(16); q(17); q(18)]
+# q = [RTz;  RTx;  RTy;  RSy;  RFy;  RFx;  LTz;  LTx;  LTy;  LSy;   LFy;   LFx;   RAy;   RAx;   RFAy;  LAy;   LAx;   LFAy]
 
 # r_X_Y - polozenie czlonu Y w ukladzie czlonu poprzedzajacego X
 
@@ -35,7 +35,7 @@ def inv_rot(R,trajectory_vector):
 # TODO umiescic link do pdf'a
 
 
-def Jacobian_Melman(q,):
+def Jacobian_Melman(q,trajectory_vector):
     RTz = q[0]; RTx = q[1]; RTy = q[2]; RSy = q[3]; RFy = q[4]; RFx = q[5]; LTz = q[6]; LTx = q[7]; LTy = q[8]; LSy = q[9]
     LFy = q[10]; LFx = q[11]; RAy = q[12]; RAx = q[13]; RFAy = q[14]; LAy = q[15]; LAx = q[16]; LFAy = q[17];
 
