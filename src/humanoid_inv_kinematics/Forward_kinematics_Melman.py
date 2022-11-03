@@ -32,7 +32,7 @@ def inv_rot(R,trajectory_vector):
 
 # Funkcja do kinematyki prostej:
 
-def Forawrd_kinematics_Melman(q):
+def Forward_kinematics_Melman(q):
     RTz = q[0];RTx = q[1];RTy = q[2];RSy = q[3];RFy = q[4];RFx = q[5];LTz = q[6];LTx = q[7];LTy = q[8];LSy = q[9]
     LFy = q[10];LFx = q[11];RAy = q[12];RAx = q[13];RFAy = q[14];LAy = q[15]; LAx = q[16];LFAy = q[17];
 
