@@ -271,18 +271,18 @@ for TimeIter in range(gp.NumberOfTimeInstances):
     # TODO: traj gen ( if leg ended in transfer mode)
 
     # Fill Gait SubPol
-    for TimeIter in range(gp.NumberOfTimeInstances):
-        con.GaitSupportPolygon.LeftFootLeftToes[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_LF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_LF[:,:, TimeIter-1] @ mp.r_LF_left_toe
-        con.GaitSupportPolygon.LeftFootRightToes[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_LF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_LF[:,:, TimeIter-1] @ mp.r_LF_right_toe
-        con.GaitSupportPolygon.LeftFootLeftHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_LF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_LF[:,:, TimeIter-1] @ mp.r_LF_left_heel
-        con.GaitSupportPolygon.LeftFootRightHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_LF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_LF[:,:, TimeIter-1] @ mp.r_LF_right_heel
-        con.GaitSupportPolygon.LeftFootCenter[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_LF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_LF[:,:, TimeIter-1] @ mp.r_LF_center
-        con.GaitSupportPolygon.RightFootLeftToes[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_left_toe
-        con.GaitSupportPolygon.RightFootRightToes[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_right_toe
-        con.GaitSupportPolygon.RightFootLeftHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_left_heel
-        con.GaitSupportPolygon.RightFootRightHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_right_heel
-        con.GaitSupportPolygon.RightFootCenter[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_center
-    a = 2
+for TimeIter in range(gp.NumberOfTimeInstances):
+    con.GaitSupportPolygon.LeftFootLeftToes[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_LF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_LF[:,:, TimeIter-1] @ mp.r_LF_left_toe
+    con.GaitSupportPolygon.LeftFootRightToes[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_LF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_LF[:,:, TimeIter-1] @ mp.r_LF_right_toe
+    con.GaitSupportPolygon.LeftFootLeftHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_LF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_LF[:,:, TimeIter-1] @ mp.r_LF_left_heel
+    con.GaitSupportPolygon.LeftFootRightHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_LF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_LF[:,:, TimeIter-1] @ mp.r_LF_right_heel
+    con.GaitSupportPolygon.LeftFootCenter[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_LF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_LF[:,:, TimeIter-1] @ mp.r_LF_center
+    con.GaitSupportPolygon.RightFootLeftToes[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_left_toe
+    con.GaitSupportPolygon.RightFootRightToes[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_right_toe
+    con.GaitSupportPolygon.RightFootLeftHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_left_heel
+    con.GaitSupportPolygon.RightFootRightHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_right_heel
+    con.GaitSupportPolygon.RightFootCenter[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_center
+
 def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
 
     tstart = 0
