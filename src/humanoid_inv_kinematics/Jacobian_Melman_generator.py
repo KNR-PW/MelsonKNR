@@ -2,7 +2,7 @@ import numpy as np
 import math as math
 from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters import Kinematics as kin
 from src.humanoid_inv_kinematics.MelsonDynamic import ConvertToRF as con
-from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters import * # <- wszystkie wektory stałe, masy oraz wersory "u" brane z tego
+from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.Melman_Parameters import * # <- wszystkie wektory stałe, masy oraz wersory "u" brane z tego
 
 # Główna funkcja do generacji Jakobianu Melmana (nie Melsona!)
 
@@ -99,14 +99,14 @@ def Jacobian_Melman(q,trajectory_vector):
     u1_LH = u1_LF
     Jv1_LH = skew_matrix(u1_LH) @ d1_LH
     u1_com = u1_LF
-    Jv1_com_prev = (R_RF_W @ (-r_CHW_RT) +R_RF_CHW @ r_com_CHW) * mCHW
-              + (R_RF_CHW @ (-r_CHW_RT) + R_RF_CHW @ r_CHW_RA + R_RF_RA @ r_com_RA) * mRA
-              + (d1_RH - R_RF_RFA @ (r_RFA_RH - r_com_RFA)) * mRFA
-              + (R_RF_CHW @ (-r_CHW_RT) + R_RF_CHW @ r_CHW_LA + R_RF_LA @ r_com_LA) * mLA
-              + (d1_LH - R_RF_LFA @ (r_LFA_LH - r_com_LFA)) * mLFA
-              + (R_RF_CHW @ (-r_CHW_RT + r_CHW_LT) + R_RF_LT @ r_com_LT) * mLT
-              + (R_RF_CHW @ (-r_CHW_RT + r_CHW_LT) + R_RF_LT @ r_LT_LS + R_RF_LS @ r_com_LS) * mLS
-              + (d1_LF + R_RF_LF @ r_com_LF) * mLF
+    Jv1_com_prev = (R_RF_W @ (-r_CHW_RT) +R_RF_CHW @ r_com_CHW) * mCHW \
+                   + (R_RF_CHW @ (-r_CHW_RT) + R_RF_CHW @ r_CHW_RA + R_RF_RA @ r_com_RA) * mRA\
+                   + (d1_RH - R_RF_RFA @ (r_RFA_RH - r_com_RFA)) * mRFA\
+                   + (R_RF_CHW @ (-r_CHW_RT) + R_RF_CHW @ r_CHW_LA + R_RF_LA @ r_com_LA) * mLA \
+                   + (d1_LH - R_RF_LFA @ (r_LFA_LH - r_com_LFA)) * mLFA \
+                   + (R_RF_CHW @ (-r_CHW_RT + r_CHW_LT) + R_RF_LT @ r_com_LT) * mLT\
+                   + (R_RF_CHW @ (-r_CHW_RT + r_CHW_LT) + R_RF_LT @ r_LT_LS + R_RF_LS @ r_com_LS) * mLS\
+                   + (d1_LF + R_RF_LF @ r_com_LF) * mLF
     Jv1_com = (skew_matrix(u1_com) / TotalMas) @ Jv1_com_prev
     Jomega1_LF = u1_LF
 

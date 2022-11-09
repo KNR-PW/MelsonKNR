@@ -41,8 +41,6 @@ def Com_Generation(y_zmp,x0,N,sum_of_e0):
             if(i+j<=N-1):
                 sum_of_p = sum_of_p + G_d[j - 1] * y_zmp[i+j]
         u = -G_i*sum_of_e -G_x@x - sum_of_p
-        #print(x[0],x[1],x[2])
-        #print(-G_i*sum_of_e,-G_x@x,- sum_of_p,u )
         sum_of_p = 0;
         x = Ad @ x + Bd @ u
         y = C@x

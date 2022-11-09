@@ -2,7 +2,7 @@ import numpy as np
 import math as math
 from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters import Kinematics as kin
 from src.humanoid_inv_kinematics.MelsonDynamic import ConvertToRF as con
-from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters import * # <- wszystkie wektory stałe, masy oraz wersory "u" brane z tego
+from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.Melman_Parameters import * # <- wszystkie wektory stałe, masy oraz wersory "u" brane z tego
 from src.humanoid_inv_kinematics.MelsonDynamic.ConvertToRF import rot2euler as euler
 # Funkcja do generowania kinematyki prostej Melmana (nie Melsona!)
 
