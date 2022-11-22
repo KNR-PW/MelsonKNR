@@ -1,9 +1,9 @@
 import numpy as np
 
-import GaitParameters as gp
-import ModelParameters as mp
-import LoadParameters as lp
-import Kinematics as kin
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.GaitParameters as gp
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters as mp
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.LoadParameters as lp
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.Kinematics as kin
 
 ## TODO: Sprawdzić jak dziqłają wektory[] ostatni i pierwszy wyraz (chyba od 0 do n-1)
 

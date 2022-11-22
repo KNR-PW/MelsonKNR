@@ -1,9 +1,9 @@
 import numpy as np
 import math
 
-import Kinematics as kin
-import ModelParameters as mp
-import GaitParameters as gp
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.Kinematics as kin
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters as mp
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.GaitParameters as gp
 
 # Joint angles order:
 # q = [ q(1) , q(2),  q(3),  q(4),   q(5),    q(6),    q(7),  q(8),  q(9),  q(10),

@@ -1,7 +1,7 @@
 import numpy as np
 import math
-import ModelParameters as mp
-import GaitParameters as gp
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters as mp
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.GaitParameters as gp
 
 
 # Funkcja do generowania funkcji ZMP dla dwóch ostatnich położeń stóp

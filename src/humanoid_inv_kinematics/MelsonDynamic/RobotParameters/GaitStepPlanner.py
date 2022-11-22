@@ -1,9 +1,9 @@
 import numpy as np
 import math
 
-import ModelParameters as mp
-import GaitParameters as gp
-import Conditions as con
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters as mp
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.GaitParameters as gp
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.Conditions as con
 
 ## TODO funkcje "fix" oraz "polyval" zmiennik w PYTHONIE
 

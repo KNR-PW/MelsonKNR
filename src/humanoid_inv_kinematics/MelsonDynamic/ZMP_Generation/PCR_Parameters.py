@@ -1,7 +1,7 @@
 import numpy as np
-import ModelParameters as mp
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters as mp
 import math
-import GaitParameters as gp
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.GaitParameters as gp
 from scipy import linalg as la
 import matplotlib.pyplot as plt
 # Skrypt przechowywujący parametry układu oraz regulatora Preview Control

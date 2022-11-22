@@ -24,11 +24,11 @@ G_d = pcr.G_d
 G_x = pcr.G_x
 G_i = pcr.G_i
 def Com_Generation(y_zmp,x0,N,sum_of_e0):
-    u = 0;
-    x = x0;
-    sum_of_p = 0;
-    sum_of_e = sum_of_e0;
-    y = C@x0;
+    u = 0
+    x = x0
+    sum_of_p = 0
+    sum_of_e = sum_of_e0
+    y = C@x0
     e = 0
     x_w = np.zeros((int(N),1))
     dx_w = np.zeros((int(N), 1))
