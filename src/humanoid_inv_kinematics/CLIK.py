@@ -21,9 +21,9 @@ from Jacobian_Melman_generator import Jacobian_Melman as J_M
 # dt - krok czasowy
 # n - liczba napędów (kolumn Jakobianu)
 
-F = np.array([[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-              [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-              [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
+F = np.array([[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], # wartość środkowa
+              [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], # wartość maksymalna
+              [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]]) # wartość minimalna
 k = 1;
 dt = gp.TimeInterval*10**(-3)
 n = 18
