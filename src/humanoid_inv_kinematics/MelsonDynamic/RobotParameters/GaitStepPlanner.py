@@ -46,6 +46,8 @@ def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
     r_z_first = np.polyval(pval_z_first, tz_first)
     r_z_second = np.polyval(pval_z_second, tz_second)
 
+
+    ## Trzeba zobaczyć czy nie użyć np.concentrate
     r_out = np.array([[r_x], [r_y], [r_z_first], [r_z_second]])
     return r_out
 
@@ -287,9 +289,6 @@ def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
     tfinal = SamplesNumber
     tmid = (tstart + tfinal) / 2
 
-    # Nie jestem pewien czy to tak zadziala, czy przypadkiem nie musze wczesniej
-    # zadeklarowac tych pval_x itd. jako np.array'ie ???
-
     # pval_x = [a5, a4, a3, a2, a1, a0]
     pval_x = createTraj5(r_start(1), r_end(1), 0, 0, 0, 0, tstart, tfinal)
 
@@ -312,9 +311,9 @@ def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
     r_z_first = np.polyval(pval_z_first, tz_first)
     r_z_second = np.polyval(pval_z_second, tz_second)
 
-    # Niewiem jak skleic taka macierz z wektorowi macierzy. Tu jest poloczenie ";" i ","
-    # r_out = np.array([r_x ;r_y; r_z_first, r_z_second]) TODO
-    r_out = []
+    # chyba axis=1? trzeba bedzie sprawdzic czy nie powinno byc zero
+    r_out = np.concatenate((r_x,r_y, r_z_first, r_z_second), axis=1) 
+ 
     return r_out
 
 
