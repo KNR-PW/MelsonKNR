@@ -5,8 +5,6 @@ import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters
 import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.GaitParameters as gp
 import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.Conditions as con
 
-## TODO funkcje "fix" oraz "polyval" zmiennik w PYTHONIE
-
 # 1. Znam liczbe kroków i udzial procentowy kolejnych faz (DS SS) -> okresl
 # wszystkie fazy chodu dla calego czasu
 # 2. Zaznacz, które punkty beda dotykac podloza w danej chwili, a które nie
@@ -41,12 +39,12 @@ def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
 
     tx = np.linspace(tstart, tfinal, SamplesNumber)
     ty = np.linspace(tstart, tfinal, SamplesNumber)
-    tz_first = np.linspace(tstart, tmid, fix(SamplesNumber / 2))
-    tz_second = np.linspace(tmid - tmid, tfinal - tmid, SamplesNumber - fix(SamplesNumber / 2))
-    r_x = polyval(pval_x, tx)
-    r_y = polyval(pval_y, ty)
-    r_z_first = polyval(pval_z_first, tz_first)
-    r_z_second = polyval(pval_z_second, tz_second)
+    tz_first = np.linspace(tstart, tmid, np.fix(SamplesNumber / 2))
+    tz_second = np.linspace(tmid - tmid, tfinal - tmid, SamplesNumber - np.fix(SamplesNumber / 2))
+    r_x = np.polyval(pval_x, tx)
+    r_y = np.polyval(pval_y, ty)
+    r_z_first = np.polyval(pval_z_first, tz_first)
+    r_z_second = np.polyval(pval_z_second, tz_second)
 
     r_out = np.array([[r_x], [r_y], [r_z_first], [r_z_second]])
     return r_out
@@ -307,12 +305,12 @@ def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
 
     tx = np.linspace(tstart, tfinal, SamplesNumber)
     ty = np.linspace(tstart, tfinal, SamplesNumber)
-    tz_first = np.linspace(tstart, tmid, fix(SamplesNumber / 2))
-    tz_second = np.linspace(tmid - tmid, tfinal - tmid, SamplesNumber - fix(SamplesNumber / 2))
-    r_x = polyval(pval_x, tx)
-    r_y = polyval(pval_y, ty)
-    r_z_first = polyval(pval_z_first, tz_first)
-    r_z_second = polyval(pval_z_second, tz_second)
+    tz_first = np.linspace(tstart, tmid, np.fix(SamplesNumber / 2))
+    tz_second = np.linspace(tmid - tmid, tfinal - tmid, SamplesNumber - np.fix(SamplesNumber / 2))
+    r_x = np.polyval(pval_x, tx)
+    r_y = np.polyval(pval_y, ty)
+    r_z_first = np.polyval(pval_z_first, tz_first)
+    r_z_second = np.polyval(pval_z_second, tz_second)
 
     # Niewiem jak skleic taka macierz z wektorowi macierzy. Tu jest poloczenie ";" i ","
     # r_out = np.array([r_x ;r_y; r_z_first, r_z_second]) TODO
@@ -341,12 +339,9 @@ def rot_GenerateStep(rot_start, rot_end, SamplesNumber):
 
     t = np.linspace(tstart, tfinal, SamplesNumber)
 
-    # To moze byc skomplikowane żeby tego "polyval" napisac w PYTHONIE
-    # nie wiem jeszcze jak to zrobic
-
-    AnglesCB[1,:] = polyval(pval_CBx, t)
-    AnglesCB[2,:] = polyval(pval_CBy, t)
-    AnglesCB[3,:] = polyval(pval_CBz, t)
+    AnglesCB[1,:] = np.polyval(pval_CBx, t)
+    AnglesCB[2,:] = np.polyval(pval_CBy, t)
+    AnglesCB[3,:] = np.polyval(pval_CBz, t)
 
     rot_out = np.zeros(3, 3, SamplesNumber)
 
