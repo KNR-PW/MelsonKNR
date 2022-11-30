@@ -5,6 +5,8 @@ import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters
 import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.GaitParameters as gp
 import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.Conditions as con
 
+from matplotlib import pyplot as plt
+
 # 1. Znam liczbe kroków i udzial procentowy kolejnych faz (DS SS) -> okresl
 # wszystkie fazy chodu dla calego czasu
 # 2. Zaznacz, które punkty beda dotykac podloza w danej chwili, a które nie
@@ -106,6 +108,41 @@ def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
     r_out = np.column_stack((r_x, r_y, np.concatenate((r_z_first, r_z_second))))
     r_out = np.transpose(r_out)
     return r_out
+
+def plotResults(traj, title):
+    # Set up a subplot grid that has height 3 and width 1,
+    # and set the first such subplot as active. 
+    plt.subplot(3, 1, 1) 
+
+    # More intuitive name
+    horizontal_axis=gp.NumberOfTimeInstances
+
+    # Make the first plot 
+    plt.title(title)
+    plt.xlabel("Step") 
+    plt.ylabel("Angle") 
+    plt.plot(horizontal_axis, traj[0,gp.NumberOfTimeInstances]) 
+
+    # Set the second subplot as active, and make the second plot. 
+    plt.subplot(3, 1, 2) 
+
+    plt.title(title)
+    plt.xlabel("Step") 
+    plt.ylabel("X") 
+    plt.plot(horizontal_axis, traj[1,gp.NumberOfTimeInstances]) 
+
+    # Set the third subplot as active, and make the third plot. 
+    plt.subplot(3, 1, 3) 
+
+    plt.title(title)
+    plt.xlabel("Step") 
+    plt.ylabel("Y") 
+    plt.plot(horizontal_axis, traj[2,gp.NumberOfTimeInstances]) 
+
+    # Show the figure. 
+    plt.show()
+
+
 
 
 ## Plan phases
@@ -339,3 +376,10 @@ for TimeIter in range(gp.NumberOfTimeInstances):
     con.GaitSupportPolygon.RightFootRightHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_right_heel
     con.GaitSupportPolygon.RightFootCenter[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_center
 
+
+# Plotting results
+plotResults(con.GaitEndPointsTrajectory.r_LF, "Left Foot")
+plotResults(con.GaitEndPointsTrajectory.r_LH, "Left Hand")
+plotResults(con.GaitEndPointsTrajectory.r_RF, "Right Foot")
+plotResults(con.GaitEndPointsTrajectory.r_RH, "Left Hand")
+plotResults(con.GaitEndPointsTrajectory.r_W, "Waist")
