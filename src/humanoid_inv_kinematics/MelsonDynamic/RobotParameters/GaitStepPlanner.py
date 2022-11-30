@@ -338,38 +338,4 @@ for TimeIter in range(gp.NumberOfTimeInstances):
     con.GaitSupportPolygon.RightFootLeftHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_left_heel
     con.GaitSupportPolygon.RightFootRightHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_right_heel
     con.GaitSupportPolygon.RightFootCenter[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_center
-print(3)
-def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
-
-    tstart = 0
-    tfinal = SamplesNumber
-    tmid = (tstart + tfinal) / 2
-
-    # pval_x = [a5, a4, a3, a2, a1, a0]
-    pval_x = createTraj5(r_start(1), r_end(1), 0, 0, 0, 0, tstart, tfinal)
-
-    # pval_y = [a5, a4, a3, a2, a1, a0]
-    pval_y = createTraj5(r_start(2), r_end(2), 0, 0, 0, 0, tstart, tfinal)
-
-    # pval_z_first = [a3, a2, a1, a0]
-    pval_z_first = createTraj3(r_start(3), stepHeight, 0, 0, tstart, tmid)
-
-    # pval_z_second = [a3, a2, a1, a0]
-    pval_z_second = createTraj3(stepHeight, r_end(3), 0, 0, tmid, tfinal)
-
-
-    tx = np.linspace(tstart, tfinal, SamplesNumber)
-    ty = np.linspace(tstart, tfinal, SamplesNumber)
-    tz_first = np.linspace(tstart, tmid, np.fix(SamplesNumber / 2))
-    tz_second = np.linspace(tmid - tmid, tfinal - tmid, SamplesNumber - np.fix(SamplesNumber / 2))
-    r_x = np.polyval(pval_x, tx)
-    r_y = np.polyval(pval_y, ty)
-    r_z_first = np.polyval(pval_z_first, tz_first)
-    r_z_second = np.polyval(pval_z_second, tz_second)
-
-    # chyba axis=1? trzeba bedzie sprawdzic czy nie powinno byc zero
-    r_out = np.concatenate((r_x,r_y, r_z_first, r_z_second), axis=1)
-
-    return r_out
-
 
