@@ -6,6 +6,25 @@ import matplotlib as plt
 ### Liczenie ZMP a potem COM
 ### uaktualnić GSP.con.GaitCoMTrajectory
 
+i = 0;
+x_k = np.zeros((2*size(r_RF,0),1))
+y_k = np.zeros((2*size(r_RF,0),1))
+while i < size(r_RF,0):
+    x_k[2 * i] = r_RF[i][0]
+    x_k[2 * i+1] = r_LF[i][0]
+    y_k[2 * i] = r_RF[i][1]
+    y_k[2 * i + 1] = r_LF[i][1]
+    i+=1
+
+i_x = 0;
+i_y = 0;
+while i_x <size(x_k):
+    ZMP_Generation(x_p, y_p, x_n, y_n, t_p, t_n):
+
+
+
+
+
 xd = np.array([0,1,2,3,4])
 yd = np.array([0,1,-1,1,0])
 t = np.array([2000,1500,400,1300,2000])
