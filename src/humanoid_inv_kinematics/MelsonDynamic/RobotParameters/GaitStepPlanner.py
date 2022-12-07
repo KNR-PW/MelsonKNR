@@ -5,7 +5,7 @@ import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters
 import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.GaitParameters as gp
 import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.Conditions as con
 
-## TODO funkcje "fix" oraz "polyval" zmiennik w PYTHONIE
+from matplotlib import pyplot as plt
 
 # 1. Znam liczbe kroków i udzial procentowy kolejnych faz (DS SS) -> okresl
 # wszystkie fazy chodu dla calego czasu
@@ -13,6 +13,62 @@ import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.Conditions as c
 # 3. Okresl pololenie i orientacje stóp w chwilach gdy dotykaja podloza
 # 4. okresl pololenia i orientacje stóp dla faz 'transfer'
 # 5. Okresl pololenia dloni (?)
+
+def rot_GenerateStep(rot_start, rot_end, SamplesNumber):
+
+    AnglesCB = np.zeros((3, SamplesNumber))
+    AnglesCB[:, [0]] = np.array([[0], [0], [GetZFromRotM(rot_start)]])
+    AnglesCB[:, [SamplesNumber-1]] = np.array([[0], [0], [GetZFromRotM(rot_end)]])
+
+    tstart = 0
+    tfinal = SamplesNumber
+
+    # pval_CBx = [a5, a4, a3, a2, a1, a0]
+    pval_CBx = createTraj5(AnglesCB[0, 0], AnglesCB[0, SamplesNumber-1], 0, 0, 0, 0, tstart, tfinal)
+
+    # pval_CBy = [a5, a4, a3, a2, a1, a0]
+    pval_CBy = createTraj5(AnglesCB[1, 0], AnglesCB[1, SamplesNumber-1], 0, 0, 0, 0, tstart, tfinal)
+
+    # pval_CBz = [a5, a4, a3, a2, a1, a0]
+    pval_CBz = createTraj5(AnglesCB[2, 0], AnglesCB[2, SamplesNumber-1], 0, 0, 0, 0, tstart, tfinal)
+
+
+    t = np.linspace(tstart, tfinal, SamplesNumber)
+
+    AnglesCB[0,:] = np.polyval(pval_CBx, t)
+    AnglesCB[1,:] = np.polyval(pval_CBy, t)
+    AnglesCB[2,:] = np.polyval(pval_CBz, t)
+
+    rot_out = np.zeros((3, 3, SamplesNumber))
+
+    for TimeIter in range(SamplesNumber):
+        rot_out[:,:, TimeIter-1] = GetRotMFromAnglesCB(AnglesCB[:, TimeIter-1])
+
+    return rot_out
+
+
+def createTraj5(theta0,thetaf,thetad0,thetadf,thetadd0,thetaddf,tstart,tfinal):
+    T = tfinal - tstart
+    a0 = theta0
+    a1 = thetad0
+    a2 = 0.5 * thetadd0
+    a3 =(1/(2*T**3)) * (20 * (thetaf - theta0) - (8 * thetadf+ 12*thetad0 )*T - (3 * thetaddf - thetadd0 )*T**2 )
+    a4 =(1/(2*T**4)) * (30 * (theta0 - thetaf) + (14 * thetadf+ 16*thetad0 )*T + (3 * thetaddf - 2*thetadd0 )*T**2 )
+    a5 =(1/(2*T**5)) * (12 * (thetaf - theta0) - 6*(thetadf+ thetad0 )*T - (thetaddf - thetadd0 )*T**2 )
+
+    ret = np.array([a5,a4,a3,a2,a1,a0])
+    return ret
+
+
+def createTraj3(theta0,thetaf,thetad0,thetadf,tstart,tfinal):
+    T=tfinal-tstart
+    a0=theta0
+    a1=thetad0
+    a2 = (-3 * (theta0 - thetaf) - (2 * thetad0 + thetadf) * T) / T ** 2
+    a3 = (2 * (theta0 - thetaf) + (thetad0 + thetadf) * T) / T ** 3
+
+    ret = np.array([a3,a2,a1,a0])
+    return ret
 
 
 def GetZFromRotM(rotM):
@@ -29,27 +85,64 @@ def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
     tfinal = SamplesNumber
     tmid = (tstart + tfinal) / 2
 
-    [a5, a4, a3, a2, a1, a0] = createTraj5(r_start(1), r_end(1), 0, 0, 0, 0, tstart, tfinal)
+    [a5, a4, a3, a2, a1, a0] = createTraj5(r_start[0], r_end[0], 0, 0, 0, 0, tstart, tfinal)
     pval_x = [a5, a4, a3, a2, a1, a0]
-    [a5, a4, a3, a2, a1, a0] = createTraj5(r_start(2), r_end(2), 0, 0, 0, 0, tstart, tfinal)
+    [a5, a4, a3, a2, a1, a0] = createTraj5(r_start[1], r_end[1], 0, 0, 0, 0, tstart, tfinal)
     pval_y = [a5, a4, a3, a2, a1, a0]
 
-    [a3, a2, a1, a0] = createTraj3(r_start(3), stepHeight, 0, 0, tstart, tmid)
+    [a3, a2, a1, a0] = createTraj3(r_start[2], stepHeight, 0, 0, tstart, tmid)
     pval_z_first = [a3, a2, a1, a0]
-    [a3, a2, a1, a0] = createTraj3(stepHeight, r_end(3), 0, 0, tmid, tfinal)
+    [a3, a2, a1, a0] = createTraj3(stepHeight, r_end[2], 0, 0, tmid, tfinal)
     pval_z_second = [a3, a2, a1, a0]
 
     tx = np.linspace(tstart, tfinal, SamplesNumber)
     ty = np.linspace(tstart, tfinal, SamplesNumber)
-    tz_first = np.linspace(tstart, tmid, fix(SamplesNumber / 2))
-    tz_second = np.linspace(tmid - tmid, tfinal - tmid, SamplesNumber - fix(SamplesNumber / 2))
-    r_x = polyval(pval_x, tx)
-    r_y = polyval(pval_y, ty)
-    r_z_first = polyval(pval_z_first, tz_first)
-    r_z_second = polyval(pval_z_second, tz_second)
+    tz_first = np.linspace(tstart, tmid, int(np.fix(SamplesNumber / 2)))
+    tz_second = np.linspace(tmid - tmid, tfinal - tmid, int(SamplesNumber - np.fix(SamplesNumber / 2)))
+    r_x = np.polyval(pval_x, tx)
+    r_y = np.polyval(pval_y, ty)
+    r_z_first = np.polyval(pval_z_first, tz_first)
+    r_z_second = np.polyval(pval_z_second, tz_second)
 
-    r_out = np.array([[r_x], [r_y], [r_z_first], [r_z_second]])
+
+    r_out = np.column_stack((r_x, r_y, np.concatenate((r_z_first, r_z_second))))
+    r_out = np.transpose(r_out)
     return r_out
+
+def plotResults(traj, title):
+    # Set up a subplot grid that has height 3 and width 1,
+    # and set the first such subplot as active. 
+    plt.subplot(3, 1, 1) 
+
+    # More intuitive name
+    horizontal_axis=gp.NumberOfTimeInstances
+
+    # Make the first plot 
+    plt.title(title)
+    plt.xlabel("Step") 
+    plt.ylabel("Angle") 
+    plt.plot(horizontal_axis, traj[0,gp.NumberOfTimeInstances]) 
+
+    # Set the second subplot as active, and make the second plot. 
+    plt.subplot(3, 1, 2) 
+
+    plt.title(title)
+    plt.xlabel("Step") 
+    plt.ylabel("X") 
+    plt.plot(horizontal_axis, traj[1,gp.NumberOfTimeInstances]) 
+
+    # Set the third subplot as active, and make the third plot. 
+    plt.subplot(3, 1, 3) 
+
+    plt.title(title)
+    plt.xlabel("Step") 
+    plt.ylabel("Y") 
+    plt.plot(horizontal_axis, traj[2,gp.NumberOfTimeInstances]) 
+
+    # Show the figure. 
+    plt.show()
+
+
 
 
 ## Plan phases
@@ -228,12 +321,12 @@ for TimeIter in range(gp.NumberOfTimeInstances):
         LeftLegTransferLength = LeftLegTransferLength + 1
     elif con.GaitPhases.LeftLeg[0][TimeIter-1] == 'support':
         if LeftLegTransferLength != 0:
-            if (TimeIter - LeftLegTransferLength - 1) > 0:
-                con.GaitEndPointsTrajectory.r_LF[:, TimeIter - LeftLegTransferLength - 2: TimeIter-1] = r_GenerateStep(con.GaitEndPointsTrajectory.r_LF[:, TimeIter - LeftLegTransferLength - 2], con.GaitEndPointsTrajectory.r_LF[:, TimeIter-1], LeftLegTransferLength + 1, gp.StepHeight-1)
-                con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - LeftLegTransferLength - 2: TimeIter-1] = rot_GenerateStep(con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - LeftLegTransferLength - 2], con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter-1], LeftLegTransferLength + 1)
+            if (TimeIter - LeftLegTransferLength) > 0:
+                con.GaitEndPointsTrajectory.r_LF[:, TimeIter - LeftLegTransferLength - 3: TimeIter-1] = r_GenerateStep(con.GaitEndPointsTrajectory.r_LF[:, TimeIter - LeftLegTransferLength - 2], con.GaitEndPointsTrajectory.r_LF[:, TimeIter-1], LeftLegTransferLength + 2, gp.StepHeight)
+                con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - LeftLegTransferLength - 3: TimeIter-1] = rot_GenerateStep(con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - LeftLegTransferLength - 2], con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter-1], LeftLegTransferLength + 2)
             #else:
                  # TODO: traj gen start( if leg started in transfer mode)
-    LeftLegTransferLength = 0
+        LeftLegTransferLength = 0
 
 # if LeftLegTransferLength != 0:
     # TODO: traj gen ( if leg ended in transfer mode)
@@ -283,99 +376,10 @@ for TimeIter in range(gp.NumberOfTimeInstances):
     con.GaitSupportPolygon.RightFootRightHeel[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_right_heel
     con.GaitSupportPolygon.RightFootCenter[:, [TimeIter-1]] = con.GaitEndPointsTrajectory.r_RF[:, [TimeIter-1]] + con.GaitEndPointsTrajectory.rot_RF[:,:, TimeIter-1] @ mp.r_RF_center
 
-def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
 
-    tstart = 0
-    tfinal = SamplesNumber
-    tmid = (tstart + tfinal) / 2
-
-    # Nie jestem pewien czy to tak zadziala, czy przypadkiem nie musze wczesniej
-    # zadeklarowac tych pval_x itd. jako np.array'ie ???
-
-    # pval_x = [a5, a4, a3, a2, a1, a0]
-    pval_x = createTraj5(r_start(1), r_end(1), 0, 0, 0, 0, tstart, tfinal)
-
-    # pval_y = [a5, a4, a3, a2, a1, a0]
-    pval_y = createTraj5(r_start(2), r_end(2), 0, 0, 0, 0, tstart, tfinal)
-
-    # pval_z_first = [a3, a2, a1, a0]
-    pval_z_first = createTraj3(r_start(3), stepHeight, 0, 0, tstart, tmid)
-
-    # pval_z_second = [a3, a2, a1, a0]
-    pval_z_second = createTraj3(stepHeight, r_end(3), 0, 0, tmid, tfinal)
-
-
-    tx = np.linspace(tstart, tfinal, SamplesNumber)
-    ty = np.linspace(tstart, tfinal, SamplesNumber)
-    tz_first = np.linspace(tstart, tmid, fix(SamplesNumber / 2))
-    tz_second = np.linspace(tmid - tmid, tfinal - tmid, SamplesNumber - fix(SamplesNumber / 2))
-    r_x = polyval(pval_x, tx)
-    r_y = polyval(pval_y, ty)
-    r_z_first = polyval(pval_z_first, tz_first)
-    r_z_second = polyval(pval_z_second, tz_second)
-
-    # Niewiem jak skleic taka macierz z wektorowi macierzy. Tu jest poloczenie ";" i ","
-    # r_out = np.array([r_x ;r_y; r_z_first, r_z_second]) TODO
-    r_out = []
-    return r_out
-
-
-def rot_GenerateStep(rot_start, rot_end, SamplesNumber):
-
-    AnglesCB = np.zeros(3, SamplesNumber)
-    AnglesCB[:, 1] = np.array([[0], [0], [GetZFromRotM(rot_start)]])
-    AnglesCB[:, SamplesNumber] = np.array([[0], [0], [GetZFromRotM(rot_end)]])
-
-    tstart = 0
-    tfinal = SamplesNumber
-
-    # pval_CBx = [a5, a4, a3, a2, a1, a0]
-    pval_CBx = createTraj5(AnglesCB[1, 1], AnglesCB[1, SamplesNumber], 0, 0, 0, 0, tstart, tfinal)
-
-    # pval_CBy = [a5, a4, a3, a2, a1, a0]
-    pval_CBy = createTraj5(AnglesCB[2, 1], AnglesCB[2, SamplesNumber], 0, 0, 0, 0, tstart, tfinal)
-
-    # pval_CBz = [a5, a4, a3, a2, a1, a0]
-    pval_CBz = createTraj5(AnglesCB[3, 1], AnglesCB[3, SamplesNumber], 0, 0, 0, 0, tstart, tfinal)
-
-
-    t = np.linspace(tstart, tfinal, SamplesNumber)
-
-    # To moze byc skomplikowane żeby tego "polyval" napisac w PYTHONIE
-    # nie wiem jeszcze jak to zrobic
-
-    AnglesCB[1,:] = polyval(pval_CBx, t)
-    AnglesCB[2,:] = polyval(pval_CBy, t)
-    AnglesCB[3,:] = polyval(pval_CBz, t)
-
-    rot_out = np.zeros(3, 3, SamplesNumber)
-
-    for TimeIter in SamplesNumber:
-        rot_out[:,:, TimeIter] = GetRotMFromAnglesCB(AnglesCB[:, TimeIter])
-
-    return rot_out
-
-
-def createTraj5(theta0,thetaf,thetad0,thetadf,thetadd0,thetaddf,tstart,tfinal):
-    T = tfinal - tstart
-    a0 = theta0
-    a1 = thetad0
-    a2 = 0.5 * thetadd0
-    a3 =(1/(2*T**3)) * (20 * (thetaf - theta0) - (8 * thetadf+ 12*thetad0 )*T - (3 * thetaddf - thetadd0 )*T**2 )
-    a4 =(1/(2*T**4)) * (30 * (theta0 - thetaf) + (14 * thetadf+ 16*thetad0 )*T + (3 * thetaddf - 2*thetadd0 )*T**2 )
-    a5 =(1/(2*T**5)) * (12 * (thetaf - theta0) - 6*(thetadf+ thetad0 )*T - (thetaddf - thetadd0 )*T**2 )
-
-    ret = np.array([a5,a4,a3,a2,a1,a0])
-    return ret
-
-
-def createTraj3(theta0,thetaf,thetad0,thetadf,tstart,tfinal):
-    T=tfinal-tstart
-    a0=theta0
-    a1=thetad0
-    a2 = (-3 * (theta0 - thetaf) - (2 * thetad0 + thetadf) * T) / T ** 2
-    a3 = (2 * (theta0 - thetaf) + (thetad0 + thetadf) * T) / T ** 3
-
-    ret = np.array([a3,a2,a1,a0])
-    return ret
-
+# Plotting results
+plotResults(con.GaitEndPointsTrajectory.r_LF, "Left Foot")
+plotResults(con.GaitEndPointsTrajectory.r_LH, "Left Hand")
+plotResults(con.GaitEndPointsTrajectory.r_RF, "Right Foot")
+plotResults(con.GaitEndPointsTrajectory.r_RH, "Left Hand")
+plotResults(con.GaitEndPointsTrajectory.r_W, "Waist")
