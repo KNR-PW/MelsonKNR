@@ -71,6 +71,30 @@ def createTraj3(theta0, thetaf, thetad0, thetadf, tstart, tfinal):
     ret = np.array([a3, a2, a1, a0])
     return ret
 
+def createTraj5(theta0,thetaf,thetad0,thetadf,thetadd0,thetaddf,tstart,tfinal):
+    T = tfinal - tstart
+    a0 = theta0
+    a1 = thetad0
+    a2 = 0.5 * thetadd0
+    a3 =(1/(2*T**3)) * (20 * (thetaf - theta0) - (8 * thetadf+ 12*thetad0 )*T - (3 * thetaddf - thetadd0 )*T**2 )
+    a4 =(1/(2*T**4)) * (30 * (theta0 - thetaf) + (14 * thetadf+ 16*thetad0 )*T + (3 * thetaddf - 2*thetadd0 )*T**2 )
+    a5 =(1/(2*T**5)) * (12 * (thetaf - theta0) - 6*(thetadf+ thetad0 )*T - (thetaddf - thetadd0 )*T**2 )
+
+    ret = np.array([a5,a4,a3,a2,a1,a0])
+    return ret
+
+
+def createTraj3(theta0,thetaf,thetad0,thetadf,tstart,tfinal):
+    T=tfinal-tstart
+    a0=theta0
+    a1=thetad0
+    a2 = (-3 * (theta0 - thetaf) - (2 * thetad0 + thetadf) * T) / T ** 2
+    a3 = (2 * (theta0 - thetaf) + (thetad0 + thetadf) * T) / T ** 3
+
+    ret = np.array([a3,a2,a1,a0])
+    return ret
+
+
 
 def GetZFromRotM(rotM):
     alpha = math.atan2(rotM[1, 0], rotM[1, 1])
@@ -82,7 +106,7 @@ def GetRotMFromAnglesCB(angles):
         [[math.cos(angles[2]), -math.sin(angles[2]), 0], [math.sin(angles[2]), math.cos(angles[2]), 0], [0, 0, 1]])
     return rotM
 
-
+pass
 def r_GenerateStep(r_start, r_end, SamplesNumber, stepHeight):
     tstart = 0
     tfinal = SamplesNumber
@@ -120,28 +144,24 @@ def plotResults(traj, title):
     # More intuitive name
     horizontal_axis = gp.NumberOfTimeInstances
 
-    # Make the first plot 
+    #Make the first plot
     plt.title(title)
-    plt.xlabel("Step")
-    plt.ylabel("Angle")
+    plt.ylabel("X")
     plt.plot(np.arange(horizontal_axis), np.transpose(traj[0,:]))
-    # Set the second subplot as active, and make the second plot. 
+   # Set the second subplot as active, and make the second plot.
     plt.subplot(3, 1, 2)
 
-    plt.title(title)
-    plt.xlabel("Step")
-    plt.ylabel("X")
+    plt.ylabel("Y")
     plt.plot(np.arange(horizontal_axis), np.transpose(traj[1,:]))
 
-    # Set the third subplot as active, and make the third plot. 
+    #Set the third subplot as active, and make the third plot.
     plt.subplot(3, 1, 3)
 
-    plt.title(title)
     plt.xlabel("Step")
-    plt.ylabel("Y")
+    plt.ylabel("Z")
     plt.plot(np.arange(horizontal_axis), np.transpose(traj[2,:]))
 
-    # Show the figure. 
+    #Show the figure.
     plt.show()
 
 
@@ -234,7 +254,7 @@ if gp.NumOfStepsLeftLeg > gp.NumOfStepsRightLeg:  # if left leg starts
     # Left leg starts
 
     if gp.NumOfStepsLeftLeg >= 3:
-        for IterPos in range(2, gp.NumOfStepsLeftLeg):
+        for IterPos in range(2, gp.NumOfStepsLeftLeg+1):
             r_LeftFootOnGround[:, IterPos - 1] = con.GaitEndPointsTrajectory.r_LF[:, 0] \
                                                  + (r_LeftFootOnGround[:, gp.NumOfStepsLeftLeg] - r_LeftFootOnGround[:,
                                                                                                   0]) * (
@@ -245,7 +265,7 @@ if gp.NumOfStepsLeftLeg > gp.NumOfStepsRightLeg:  # if left leg starts
                                                                     IterPos - 1.5) / (gp.NumOfStepsLeftLeg - 1)
 
     elif gp.NumOfStepsLeftLeg >= 2:
-        for IterPos in range(2, gp.NumOfStepsLeftLeg):
+        for IterPos in range(2, gp.NumOfStepsLeftLeg+1):
             r_LeftFootOnGround[:, IterPos - 1] = con.GaitEndPointsTrajectory.r_LF[:, 0] \
                                                  + (r_LeftFootOnGround[:, gp.NumOfStepsLeftLeg] - r_LeftFootOnGround[:,
                                                                                                   0]) * (
@@ -256,7 +276,7 @@ if gp.NumOfStepsLeftLeg > gp.NumOfStepsRightLeg:  # if left leg starts
                                                                     IterPos - 1) / (gp.NumOfStepsLeftLeg)
 
     if gp.NumOfStepsRightLeg >= 2:  # if right foot transfers twice then calculate middle positions
-        for IterPos in range(2, gp.NumOfStepsRightLeg):
+        for IterPos in range(2, gp.NumOfStepsRightLeg+1):
             r_RightFootOnGround[:, IterPos - 1] = con.GaitEndPointsTrajectory.r_RF[:, 0] \
                                                   + (r_RightFootOnGround[:,
                                                      gp.NumOfStepsRightLeg] - r_RightFootOnGround[:, 0]) * (
@@ -270,7 +290,7 @@ if gp.NumOfStepsLeftLeg > gp.NumOfStepsRightLeg:  # if left leg starts
 
 elif gp.NumOfStepsLeftLeg < gp.NumOfStepsRightLeg:  # Right leg starts
     if gp.NumOfStepsLeftLeg >= 2:  # if left foot transfers twice then calculate middle positions
-        for IterPos in range(2, gp.NumOfStepsLeftLeg):
+        for IterPos in range(2, gp.NumOfStepsLeftLeg+1):
             r_LeftFootOnGround[:, IterPos - 1] = con.GaitEndPointsTrajectory.r_LF[:, 0] \
                                                  + (r_LeftFootOnGround[:, gp.NumOfStepsLeftLeg] - r_LeftFootOnGround[:,
                                                                                                   0]) * (
@@ -281,7 +301,7 @@ elif gp.NumOfStepsLeftLeg < gp.NumOfStepsRightLeg:  # Right leg starts
                                                                     IterPos - 1) / (gp.NumOfStepsLeftLeg)
 
     if gp.NumOfStepsRightLeg >= 3:
-        for IterPos in range(2, gp.NumOfStepsRightLeg):
+        for IterPos in range(2, gp.NumOfStepsRightLeg+1):
             r_RightFootOnGround[:, IterPos - 1] = con.GaitEndPointsTrajectory.r_RF[:, 0] \
                                                   + (r_RightFootOnGround[:,
                                                      gp.NumOfStepsRightLeg] - r_RightFootOnGround[:, 0]) * (
@@ -293,7 +313,7 @@ elif gp.NumOfStepsLeftLeg < gp.NumOfStepsRightLeg:  # Right leg starts
                                                                      gp.NumOfStepsRightLeg - 1)
 
     elif gp.NumOfStepsRightLeg >= 2:
-        for IterPos in range(2, gp.NumOfStepsRightLeg):
+        for IterPos in range(2, gp.NumOfStepsRightLeg+1):
             r_RightFootOnGround[:, IterPos - 1] = con.GaitEndPointsTrajectory.r_RF[:, 0] \
                                                   + (r_RightFootOnGround[:,
                                                      gp.NumOfStepsRightLeg] - r_RightFootOnGround[:, 0]) * (
@@ -307,7 +327,7 @@ elif gp.NumOfStepsLeftLeg < gp.NumOfStepsRightLeg:  # Right leg starts
 
 else:  # equal number of steps -> right leg starts
     if gp.NumOfStepsLeftLeg >= 2:  # if left foot transfers twice then calculate middle positions
-        for IterPos in range(2, gp.NumOfStepsRightLeg):
+        for IterPos in range(2, gp.NumOfStepsRightLeg+1):
             r_LeftFootOnGround[:, IterPos - 1] = con.GaitEndPointsTrajectory.r_LF[:, 0] \
                                                  + (r_LeftFootOnGround[:, gp.NumOfStepsLeftLeg] - r_LeftFootOnGround[:,
                                                                                                   0]) * (
@@ -318,7 +338,7 @@ else:  # equal number of steps -> right leg starts
                                                                     IterPos - 1) / (gp.NumOfStepsLeftLeg)
 
     if gp.NumOfStepsRightLeg >= 2:  # if right foot transfers twice then calculate middle positions
-        for IterPos in range(2, gp.NumOfStepsRightLeg):
+        for IterPos in range(2, gp.NumOfStepsRightLeg+1):
             r_RightFootOnGround[:, IterPos - 1] = con.GaitEndPointsTrajectory.r_RF[:, 0] \
                                                   + (r_RightFootOnGround[:,
                                                      gp.NumOfStepsRightLeg] - r_RightFootOnGround[:, 0]) * (
@@ -330,22 +350,22 @@ else:  # equal number of steps -> right leg starts
                                                              gp.NumOfStepsRightLeg)
 
 # Fill Gait End Points Trajectory
-PhaseNumberLeftFoot = 1
-PhaseNumberRightFoot = 1
+PhaseNumberLeftFoot = 0
+PhaseNumberRightFoot = 0
 
-for TimeIter in range(gp.NumberOfTimeInstances):
+for TimeIter in range(1,gp.NumberOfTimeInstances):
     if con.GaitPhases.LeftLeg[0][TimeIter - 1] == 'support':
-        con.GaitEndPointsTrajectory.r_LF[:, TimeIter - 1] = r_LeftFootOnGround[:, PhaseNumberLeftFoot - 1]
-        con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - 1] = GetRotMFromAnglesCB(
-            anglesCB_LeftFootOnGround[:, PhaseNumberLeftFoot - 1])
+        con.GaitEndPointsTrajectory.r_LF[:, TimeIter] = r_LeftFootOnGround[:, PhaseNumberLeftFoot]
+        con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter] = GetRotMFromAnglesCB(
+            anglesCB_LeftFootOnGround[:, PhaseNumberLeftFoot])
         if TimeIter < gp.NumberOfTimeInstances:
             if con.GaitPhases.LeftLeg[0][TimeIter] == 'transfer':
                 PhaseNumberLeftFoot = PhaseNumberLeftFoot + 1
 
     if con.GaitPhases.RightLeg[0][TimeIter - 1] == 'support':
-        con.GaitEndPointsTrajectory.r_RF[:, TimeIter - 1] = r_RightFootOnGround[:, PhaseNumberRightFoot - 1]
+        con.GaitEndPointsTrajectory.r_RF[:, TimeIter - 1] = r_RightFootOnGround[:, PhaseNumberRightFoot]
         con.GaitEndPointsTrajectory.rot_RF[:, :, TimeIter - 1] = GetRotMFromAnglesCB(
-            anglesCB_RightFootOnGround[:, PhaseNumberRightFoot - 1])
+            anglesCB_RightFootOnGround[:, PhaseNumberRightFoot])
         if TimeIter < gp.NumberOfTimeInstances:
             if con.GaitPhases.RightLeg[0][TimeIter] == 'transfer':
                 PhaseNumberRightFoot = PhaseNumberRightFoot + 1
@@ -354,19 +374,19 @@ for TimeIter in range(gp.NumberOfTimeInstances):
 LeftLegTransferLength = 0
 RightLegTransferLength = 0
 
-for TimeIter in range(gp.NumberOfTimeInstances):
-    if con.GaitPhases.LeftLeg[0][TimeIter - 1] == 'transfer':
+for TimeIter in range(1,gp.NumberOfTimeInstances):
+    if con.GaitPhases.LeftLeg[0][TimeIter-1] == 'transfer':
         LeftLegTransferLength = LeftLegTransferLength + 1
-    elif con.GaitPhases.LeftLeg[0][TimeIter - 1] == 'support':
+    elif con.GaitPhases.LeftLeg[0][TimeIter-1] == 'support':
         if LeftLegTransferLength != 0:
-            if (TimeIter - LeftLegTransferLength) > 0:
+            if (TimeIter - LeftLegTransferLength -1) > 0:
                 con.GaitEndPointsTrajectory.r_LF[:,
-                TimeIter - LeftLegTransferLength - 3: TimeIter - 1] = r_GenerateStep(
-                    con.GaitEndPointsTrajectory.r_LF[:, TimeIter - LeftLegTransferLength - 2],
+                TimeIter - LeftLegTransferLength - 2: TimeIter] = r_GenerateStep(
+                    con.GaitEndPointsTrajectory.r_LF[:, TimeIter - LeftLegTransferLength - 1],
                     con.GaitEndPointsTrajectory.r_LF[:, TimeIter - 1], LeftLegTransferLength + 2, gp.StepHeight)
                 con.GaitEndPointsTrajectory.rot_LF[:, :,
-                TimeIter - LeftLegTransferLength - 3: TimeIter - 1] = rot_GenerateStep(
-                    con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - LeftLegTransferLength - 2],
+                TimeIter - LeftLegTransferLength - 2: TimeIter] = rot_GenerateStep(
+                    con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - LeftLegTransferLength - 1],
                     con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - 1], LeftLegTransferLength + 2)
             # else:
             # TODO: traj gen start( if leg started in transfer mode)
@@ -376,41 +396,41 @@ for TimeIter in range(gp.NumberOfTimeInstances):
 # TODO: traj gen ( if leg ended in transfer mode)
 
 
-for TimeIter in range(gp.NumberOfTimeInstances):
+for TimeIter in range(1,gp.NumberOfTimeInstances):
     if con.GaitPhases.LeftLeg[0][TimeIter - 1] == 'transfer':
         LeftLegTransferLength = LeftLegTransferLength + 1
     elif con.GaitPhases.LeftLeg[0][TimeIter - 1] == 'support':
         if LeftLegTransferLength != 0:
             if (TimeIter - LeftLegTransferLength - 1) > 0:
                 con.GaitEndPointsTrajectory.r_LF[:,
-                TimeIter - LeftLegTransferLength - 2: TimeIter - 1] = r_GenerateStep(
-                    con.GaitEndPointsTrajectory.r_LF[:, TimeIter - LeftLegTransferLength - 2],
-                    con.GaitEndPointsTrajectory.r_LF[:, TimeIter - 1], LeftLegTransferLength + 2, gp.StepHeight)
+                TimeIter - LeftLegTransferLength - 2: TimeIter] = r_GenerateStep(
+                    con.GaitEndPointsTrajectory.r_LF[:, TimeIter - LeftLegTransferLength - 1],
+                    con.GaitEndPointsTrajectory.r_LF[:, TimeIter], LeftLegTransferLength + 2, gp.StepHeight)
                 con.GaitEndPointsTrajectory.rot_LF[:, :,
-                TimeIter - LeftLegTransferLength - 2: TimeIter - 1] = rot_GenerateStep(
-                    con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - LeftLegTransferLength - 2],
-                    con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - 1], LeftLegTransferLength + 2)
+                TimeIter - LeftLegTransferLength - 2: TimeIter] = rot_GenerateStep(
+                    con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - LeftLegTransferLength - 1],
+                    con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter], LeftLegTransferLength + 2)
             # else:
             # TODO: traj gen start( if leg started in transfer mode)
 
-    LeftLegTransferLength = 0
+        LeftLegTransferLength = 0
 
-    if con.GaitPhases.RightLeg[0][TimeIter - 1] == 'transfer':
+    if con.GaitPhases.RightLeg[0][TimeIter] == 'transfer':
         RightLegTransferLength = RightLegTransferLength + 1
-    elif con.GaitPhases.RightLeg[0][TimeIter - 1] == 'support':
+    elif con.GaitPhases.RightLeg[0][TimeIter] == 'support':
         if RightLegTransferLength != 0:
             if (TimeIter - RightLegTransferLength - 1) > 0:
                 con.GaitEndPointsTrajectory.r_RF[:,
-                TimeIter - RightLegTransferLength - 2: TimeIter - 1] = r_GenerateStep(
-                    con.GaitEndPointsTrajectory.r_RF[:, TimeIter - RightLegTransferLength - 2],
-                    con.GaitEndPointsTrajectory.r_RF[:, TimeIter - 1], RightLegTransferLength + 2, gp.StepHeight)
+                TimeIter - RightLegTransferLength - 2: TimeIter] = r_GenerateStep(
+                    con.GaitEndPointsTrajectory.r_RF[:, TimeIter - RightLegTransferLength - 1],
+                    con.GaitEndPointsTrajectory.r_RF[:, TimeIter], RightLegTransferLength + 2, gp.StepHeight)
                 con.GaitEndPointsTrajectory.rot_RF[:, :,
-                TimeIter - RightLegTransferLength - 2: TimeIter - 1] = rot_GenerateStep(
-                    con.GaitEndPointsTrajectory.rot_RF[:, :, TimeIter - RightLegTransferLength - 2],
-                    con.GaitEndPointsTrajectory.rot_RF[:, :, TimeIter - 1], RightLegTransferLength + 2)  # else:
+                TimeIter - RightLegTransferLength - 2: TimeIter] = rot_GenerateStep(
+                    con.GaitEndPointsTrajectory.rot_RF[:, :, TimeIter - RightLegTransferLength - 1],
+                    con.GaitEndPointsTrajectory.rot_RF[:, :, TimeIter], RightLegTransferLength + 2)  # else:
                 # TODO: traj gen start( if leg started in transfer mode)
 
-    RightLegTransferLength = 0
+        RightLegTransferLength = 0
 
 # if LeftLegTransferLength != 0:
 # TODO: traj gen ( if leg ended in transfer mode)

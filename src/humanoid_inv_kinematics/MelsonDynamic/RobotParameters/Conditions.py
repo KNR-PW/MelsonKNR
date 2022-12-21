@@ -66,6 +66,7 @@ class SupportPolygon:
         self.RightFootRightHeel = RightFootRightHeel
         self.RightFootCenter = RightFootCenter
 
+
 GaitSupportPolygon=SupportPolygon(np.zeros((3,gp.NumberOfTimeInstances)), np.zeros((3,gp.NumberOfTimeInstances)), np.zeros((3,gp.NumberOfTimeInstances)),
                                   np.zeros((3,gp.NumberOfTimeInstances)),  np.zeros((3,gp.NumberOfTimeInstances)), np.zeros((3,gp.NumberOfTimeInstances)),
                                   np.zeros((3,gp.NumberOfTimeInstances)), np.zeros((3,gp.NumberOfTimeInstances)), np.zeros((3,gp.NumberOfTimeInstances)),
