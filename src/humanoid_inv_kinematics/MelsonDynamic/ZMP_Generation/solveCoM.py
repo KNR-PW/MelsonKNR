@@ -1,54 +1,66 @@
 import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.GaitStepPlanner as GSP
 import src.humanoid_inv_kinematics.MelsonDynamic.ZMP_Generation.ZMP_Generation as zmp
-import src.humanoid_inv_kinematics.MelsonDynamic.ZMP_Generation.CoM_Generation_one_step as cg
+import src.humanoid_inv_kinematics.MelsonDynamic.ZMP_Generation.CoM_Generation as CG
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.GaitParameters as GP
 import numpy as np
-import matplotlib as plt
+import matplotlib.pyplot as plt
+r_LF = GSP.con.GaitEndPointsTrajectory.r_LF
+r_RF = GSP.con.GaitEndPointsTrajectory.r_RF
+RF_contact = GSP.con.CharPointsContactOnOff.RightFootCenter
+LF_contact = GSP.con.CharPointsContactOnOff.LeftFootCenter
+N = GP.NumberOfTimeInstances
 ### Liczenie ZMP a potem COM
 ### uaktualnić GSP.con.GaitCoMTrajectory
-
-i = 0;
-x_k = np.zeros((2*size(r_RF,0),1))
-y_k = np.zeros((2*size(r_RF,0),1))
-while i < size(r_RF,0):
-    x_k[2 * i] = r_RF[i][0]
-    x_k[2 * i+1] = r_LF[i][0]
-    y_k[2 * i] = r_RF[i][1]
-    y_k[2 * i + 1] = r_LF[i][1]
-    i+=1
-
-i_x = 0;
-i_y = 0;
-while i_x <size(x_k):
-    ZMP_Generation(x_p, y_p, x_n, y_n, t_p, t_n):
-
-
-
-
-
-xd = np.array([0,1,2,3,4])
-yd = np.array([0,1,-1,1,0])
-t = np.array([2000,1500,400,1300,2000])
-x = np.zeros((3,1))
-sum_of_e = 0
-Nl = cg.Nl
-N = 0
-x_ref1,y_ref1,n = zmp.ZMP_Generation(xd[0],yd[0],xd[1],yd[1],t[0],t[1]/2)
-N = N+n
-x_ref2,y_ref2,n = zmp.ZMP_Generation(xd[1],yd[1],xd[2],yd[2],t[1]/2,t[2]/2)
-N = N+n
-x_ref3,y_ref3,n = zmp.ZMP_Generation(xd[2],yd[2],xd[3],yd[3],t[2]/2,t[3]/2)
-N = N+n
-x_ref4,y_ref4,n = zmp.ZMP_Generation(xd[3],yd[3],xd[4],yd[4],t[3]/2,t[4])
-N = N+n
-x_ref = np.block([[x_ref1],[x_ref2],[x_ref3],[x_ref4]])
-y_ref = np.block([[y_ref1],[y_ref2],[y_ref3],[y_ref4]])
-x_w = np.zeros((int(N),1))
-for i in range(int(N)):
-    x,sum_of_e,y = cg.Com_Generation_one_step(y_ref[i:i+Nl],x, sum_of_e)
-    x_w[i] = x[0]
-
-
-plt.plot(range(int(N)),y_ref,label = "Input")
-plt.plot(range(int(N)),x_w,label = "Output")
-plt.legend()
+z_height = GP.StepPelvisHeight
+## Wektory położeń stopy, która w tym momencie podpiera robota oraz wektor czasu, kiedy te stopy podpierają
+x_zmp = np.zeros((N,1)) # dla osi x
+y_zmp = np.zeros((N,1)) # dla osi y
+# dla osi z jest stałe w trakcie chodu
+j = 0
+support = "none"
+## Pętla na podstawie tablic kontaktu wylicza x_zmp oraz y_zmp:
+while j < N:
+    if ((RF_contact[0][j] == True) & (LF_contact[0][j] == False)):
+        support = "right"
+        x_zmp[j] = r_RF[0][j]
+        y_zmp[j] = r_RF[1][j]
+    elif ((RF_contact[0][j] == False) & (LF_contact[0][j] == True)):
+        support = "left"
+        x_zmp[j] = r_LF[0][j]
+        y_zmp[j] = r_LF[1][j]
+    elif ((RF_contact[0][j] == True) & (LF_contact[0][j] == True)):
+        if(support == "right"):
+            x_zmp[j] = r_LF[0][j]
+            y_zmp[j] = r_LF[1][j]
+        elif(support == "left"):
+            x_zmp[j] = r_RF[0][j]
+            y_zmp[j] = r_RF[1][j]
+    j+=1
+j = 0
+while j < N:
+    if ((RF_contact[0][j] == True) & (LF_contact[0][j] == True)):
+        x_zmp[j] = (r_RF[0][j]+r_LF[0][j])/2
+        y_zmp[j] = (r_RF[1][j]+r_LF[1][j])/2
+    else:
+        break
+    j+=1
+j = N-1
+while j >= 0:
+    if ((RF_contact[0][j] == True) & (LF_contact[0][j] == True)):
+        x_zmp[j] = (r_RF[0][j]+r_LF[0][j])/2
+        y_zmp[j] = (r_RF[1][j]+r_LF[1][j])/2
+    else:
+        break
+    j-=1
+plt.plot(range(N),y_zmp)
 plt.show()
+## Generowanie położenia CoM na podstawie ZMP:
+x_com,dx_com,sum_of_e_x, x_k = CG.Com_Generation(x_zmp,np.zeros((3,1)),x_zmp.size,0)
+y_com,dy_com,sum_of_e_y, y_k = CG.Com_Generation(y_zmp,np.zeros((3,1)),y_zmp.size,0)
+z_com = np.ones((x_zmp.size,1))*z_height
+
+## Nadpisanie wektora położenia bioder (CoM):
+GSP.con.GaitEndPointsTrajectory.r_W = np.block([[np.transpose(x_com)],[np.transpose(y_com)],[np.transpose(z_com)]])
+
+## Plotowanie wyników:
+#GSP.plotResults(GSP.con.GaitEndPointsTrajectory.r_W, "Waist")
