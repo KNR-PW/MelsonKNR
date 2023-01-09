@@ -355,8 +355,8 @@ PhaseNumberRightFoot = 0
 
 for TimeIter in range(1,gp.NumberOfTimeInstances):
     if con.GaitPhases.LeftLeg[0][TimeIter - 1] == 'support':
-        con.GaitEndPointsTrajectory.r_LF[:, TimeIter] = r_LeftFootOnGround[:, PhaseNumberLeftFoot]
-        con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter] = GetRotMFromAnglesCB(
+        con.GaitEndPointsTrajectory.r_LF[:, TimeIter -1] = r_LeftFootOnGround[:, PhaseNumberLeftFoot]
+        con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter -1] = GetRotMFromAnglesCB(
             anglesCB_LeftFootOnGround[:, PhaseNumberLeftFoot])
         if TimeIter < gp.NumberOfTimeInstances:
             if con.GaitPhases.LeftLeg[0][TimeIter] == 'transfer':
@@ -374,6 +374,7 @@ for TimeIter in range(1,gp.NumberOfTimeInstances):
 LeftLegTransferLength = 0
 RightLegTransferLength = 0
 
+## ERROR HERE
 for TimeIter in range(1,gp.NumberOfTimeInstances):
     if con.GaitPhases.LeftLeg[0][TimeIter-1] == 'transfer':
         LeftLegTransferLength = LeftLegTransferLength + 1
@@ -382,11 +383,11 @@ for TimeIter in range(1,gp.NumberOfTimeInstances):
             if (TimeIter - LeftLegTransferLength -1) > 0:
                 con.GaitEndPointsTrajectory.r_LF[:,
                 TimeIter - LeftLegTransferLength - 2: TimeIter] = r_GenerateStep(
-                    con.GaitEndPointsTrajectory.r_LF[:, TimeIter - LeftLegTransferLength - 1],
+                    con.GaitEndPointsTrajectory.r_LF[:, TimeIter - LeftLegTransferLength - 2],
                     con.GaitEndPointsTrajectory.r_LF[:, TimeIter - 1], LeftLegTransferLength + 2, gp.StepHeight)
                 con.GaitEndPointsTrajectory.rot_LF[:, :,
                 TimeIter - LeftLegTransferLength - 2: TimeIter] = rot_GenerateStep(
-                    con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - LeftLegTransferLength - 1],
+                    con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - LeftLegTransferLength - 2],
                     con.GaitEndPointsTrajectory.rot_LF[:, :, TimeIter - 1], LeftLegTransferLength + 2)
             # else:
             # TODO: traj gen start( if leg started in transfer mode)
@@ -479,7 +480,7 @@ for TimeIter in range(gp.NumberOfTimeInstances):
 
 # Plotting results
 plotResults(con.GaitEndPointsTrajectory.r_LF, "Left Foot")
-plotResults(con.GaitEndPointsTrajectory.r_LH, "Left Hand")
+#plotResults(con.GaitEndPointsTrajectory.r_LH, "Left Hand")
 plotResults(con.GaitEndPointsTrajectory.r_RF, "Right Foot")
-plotResults(con.GaitEndPointsTrajectory.r_RH, "Left Hand")
-plotResults(con.GaitEndPointsTrajectory.r_W, "Waist")
+#plotResults(con.GaitEndPointsTrajectory.r_RH, "Left Hand")
+#plotResults(con.GaitEndPointsTrajectory.r_W, "Waist")
