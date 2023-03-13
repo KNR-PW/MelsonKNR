@@ -13,14 +13,14 @@ T = gp.TimeInterval*10**(-3) # Krok czasowy
 
 # Parametry układu
 
-z_c = 1
+z_c = 0.25
 g = 9.81
 
 # Parametry regulatora Preview Control
-R = 0.00001;
-Qe = 1;
+R = 0.000001;
+Qe = 10;
 Q = np.array([[0.01,0,0],[0, 0.01,0],[0,0,0.01]])
-Nl = 240;
+Nl = 1000;
 N = np.linspace(0,Nl,Nl)
 # Dyskretne macierze rozwiązania równań stanu
 
