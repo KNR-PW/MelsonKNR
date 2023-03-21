@@ -75,8 +75,8 @@ while j<DS_counter-1:
             i+=1
     j+=1
 
-plt.plot(range(N),x_zmp)
-plt.show()
+#plt.plot(range(N),x_zmp)
+#plt.show()
 ## Generowanie położenia CoM na podstawie ZMP:
 x_com,dx_com,sum_of_e_x, x_k = CG.Com_Generation(x_zmp,np.zeros((3,1)),x_zmp.size,0)
 y_com,dy_com,sum_of_e_y, y_k = CG.Com_Generation(y_zmp,np.zeros((3,1)),y_zmp.size,0)
@@ -86,6 +86,6 @@ z_com = np.ones((x_zmp.size,1))*z_height
 GSP.con.GaitEndPointsTrajectory.r_W = np.block([[np.transpose(x_com)],[np.transpose(y_com)],[np.transpose(z_com)]])
 
 ## Plotowanie wyników:
-plt.plot(range(N),x_com,range(N),x_zmp)
-plt.show()
+#plt.plot(range(N),x_com,range(N),x_zmp)
+#plt.show()
 GSP.plotResults(GSP.con.GaitEndPointsTrajectory.r_W, "Waist")
