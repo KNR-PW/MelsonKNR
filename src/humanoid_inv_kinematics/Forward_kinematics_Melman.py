@@ -2,7 +2,7 @@ import numpy as np
 import math as math
 from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters import Kinematics as kin
 from src.humanoid_inv_kinematics.MelsonDynamic import ConvertToRF as con
-from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.Melman_Parameters import * # <- wszystkie wektory stałe, masy oraz wersory "u" brane z tego
+from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.Melman_Parameters import *  # <- wszystkie wektory stałe, masy oraz wersory "u" brane z tego
 from src.humanoid_inv_kinematics.MelsonDynamic.ConvertToRF import rot2euler as euler
 # Funkcja do generowania kinematyki prostej Melmana (nie Melsona!)
 
@@ -27,12 +27,12 @@ def skew_matrix(r):
     return R
 # Funkcja generująca odwrotną macierz rotacji:
 
-def inv_rot(R,trajectory_vector):
+def inv_rot(R):
     return np.transpose(R)
 
 # Funkcja do kinematyki prostej:
 
-def Forward_kinematics_Melman(q):
+def Forward_kinematics_Melman(q, trajectory_vector):
     RTz = q[0];RTx = q[1];RTy = q[2];RSy = q[3];RFy = q[4];RFx = q[5];LTz = q[6];LTx = q[7];LTy = q[8];LSy = q[9]
     LFy = q[10];LFx = q[11];RAy = q[12];RAx = q[13];RFAy = q[14];LAy = q[15]; LAx = q[16];LFAy = q[17];
 
@@ -48,7 +48,7 @@ def Forward_kinematics_Melman(q):
     R_LT_LS = kin.rotY(LSy)
     R_LS_LF = kin.rotY(LFy) @ kin.rotX(LFx)
 
-
+    R_0_RF = con.euler2rot(trajectory_vector[15:18])
     R_CHW_RF = R_CHW_RT @ R_RT_RS @ R_RS_RF
     R_RF_CHW = inv_rot(R_CHW_RF)
     R_0_CHW = R_0_RF @ R_RF_CHW
@@ -69,7 +69,7 @@ def Forward_kinematics_Melman(q):
     r_RF_RH = -R_RF_RS @ r_RS_RF - R_RF_RT @ r_RT_RS + R_RF_CHW @ ( -r_CHW_RT + r_CHW_RA) +R_RF_RA @ r_RA_RFA + R_RF_RFA @ r_RFA_RH
 
     # Położenie LH względem RF
-    r_RF_LH = -R_RF_RS @ r_RS_RF - R_RF_RT @ r_RT_RS + R_RF_CHW @ (-r_CHW_RT + r_CHW_LA) + R_RF_LA @ r_RA_LFA + R_RF_LFA @ r_LFA_RH
+    r_RF_LH = -R_RF_RS @ r_RS_RF - R_RF_RT @ r_RT_RS + R_RF_CHW @ (-r_CHW_RT + r_CHW_LA) + R_RF_LA @ r_LA_LFA + R_RF_LFA @ r_LFA_LH
 
     # Położenie CoM względem RF
     r_RF_CoM = 1/TotalMas * (mRF * (r_com_RF)
@@ -87,5 +87,7 @@ def Forward_kinematics_Melman(q):
     # Kąty eulera LF względem RF
     gamma_RF_LF = euler(R_RF_LF)
 
-    x =np.concatenate((r_RF_LF, r_RF_RH, r_RF_LH, r_RF_CoM, gamma_RF_LF))
+    x =np.concatenate((r_RF_LF.reshape((3,1)), r_RF_RH.reshape((3,1)), r_RF_LH.reshape((3,1)), r_RF_CoM.reshape((3,1)), gamma_RF_LF.reshape((3,1))))
     return x
+#q = np.ones((18,1))
+#print(Forward_kinematics_Melman(q, np.zeros((21,1))))

@@ -44,7 +44,6 @@ while j < N :
 
         while((RF_contact[0][j+i] == True) & (LF_contact[0][j+i] == True) & (j+i+1<N)):
             i+=1
-            print(j+i)
         j = j+i
         DS_end[DS_counter] = j
         DS_counter += 1
@@ -74,7 +73,6 @@ while j<DS_counter-1:
             y_zmp[int(DS_end[j]) - i] = y_DS_2
             i+=1
     j+=1
-
 #plt.plot(range(N),x_zmp)
 #plt.show()
 ## Generowanie położenia CoM na podstawie ZMP:

@@ -1,4 +1,4 @@
-from UtilityFunctions import DegToRad
+from src.humanoid_inv_kinematics.MelsonDynamic.UtilityFunctions import DegToRad
 import numpy as np
 
 from src.humanoid_inv_kinematics.MelsonDynamic.UtilityFunctions.DegToRad import deg_to_rad

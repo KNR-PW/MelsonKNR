@@ -6,8 +6,8 @@ import src.humanoid_inv_kinematics.MelsonDynamic.ConvertToRF as Conv
 import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.GaitParameters as GP
 import src.humanoid_inv_kinematics.MelsonDynamic.RadModelToDynamixel as dynamixel
 from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.ModelParameters import *
-from src.humanoid_inv_kinematics.CLIK_Melman import CLIK
-from src.humanoid_inv_kinematics.Forward_kinematics_Melman import Forward_kinematics_Melman as k_for
+from src.humanoid_inv_kinematics.CLIK_Melson import CLIK
+from src.humanoid_inv_kinematics.Forward_kinematics_Melson import Forward_kinematics_Melson as k_for
 ## (1) Load Parameters wywoła się w StepPlanner
 ## (2) Trajektoria nóg -> r_stóp_k[x,y,0] (dla wartości końcowych) i r_stóp_t (w czasie chodu (w powietrzu))
 ## (3) ZMP i CoM trajectory:
@@ -30,10 +30,8 @@ for TimeIter in range(GP.NumberOfTimeInstances):
 trajectory_RF = Conv.convert_to_rf(trajectory_0)
 # Pierwsza iteracja CLIK:
 Test_Trajectory = np.zeros((GP.NumberOfTimeInstances, 15))
-Gait_JointAngles = np.zeros((GP.NumberOfTimeInstances, 18))
-q_0 = np.array([[-0.0000], [-0.1031], [ -0.2778], [0.4081], [-0.7303], [0.1031],
-                [0.0000], [0.1031], [ -0.3778], [1.], [-0.303], [ -0.1031],
-                [ 0.3999], [-0.1360], [ -0.1], [0.3999], [0.1360], [-0.2334]])
+Gait_JointAngles = np.zeros((GP.NumberOfTimeInstances, 19))
+q_0 = q0
 Gait_JointAngles[0][:] = np.transpose(q_0)
 for i in range(1000):
     Gait_JointAngles[[0], :] = np.transpose(
@@ -44,7 +42,7 @@ for i in range(1, GP.NumberOfTimeInstances):
     Test_Trajectory[[i], :] = np.transpose(k_for(np.transpose(Gait_JointAngles[[i], :]),trajectory_0[:, [i]]))
 plt.plot(range(GP.NumberOfTimeInstances),Gait_JointAngles[:, [0]] )
 plt.show()
-Robot_JointAngles = np.zeros((GP.NumberOfTimeInstances, 18))
+Robot_JointAngles = np.zeros((GP.NumberOfTimeInstances, 19))
 
 for i in range(GP.NumberOfTimeInstances):
     Robot_JointAngles[i][:] = dynamixel.rad_model_to_dynamixel(Gait_JointAngles[i][:])

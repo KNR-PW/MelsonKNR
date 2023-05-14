@@ -1,6 +1,6 @@
 import numpy as np
 import math
-import PCR_Parameters as pcr
+import src.humanoid_inv_kinematics.MelsonDynamic.ZMP_Generation.PCR_Parameters as pcr
 
 # Funkcja generująca położenie środka masy w 1 wymiarze na podstawie wygenerowanej trajektorii ZMP
 

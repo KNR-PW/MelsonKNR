@@ -19,19 +19,16 @@ def rot2euler(rot):
 
 
 def convert_to_rf(trajectory):
-    trajectory = np.transpose(np.array(trajectory))
     m, n = trajectory.shape
     r_trajectory = np.zeros((15, n))
 
     for i in range(0, n):
-        rot_rf = euler2rot(trajectory[15:18, i])
-        rot_lf = euler2rot(trajectory[18:21, i])
+        rot_rf = euler2rot(trajectory[15:18, [i]])
+        rot_lf = euler2rot(trajectory[18:21, [i]])
         rot_mul = np.transpose(rot_rf) * rot_lf
-        r_trajectory[:, i] = np.concatenate((np.transpose(rot_rf).dot(trajectory[3:6, i] - trajectory[0:3, i]),
-                                             np.transpose(rot_rf).dot(trajectory[6:9, i] - trajectory[0:3, i]),
-                                             np.transpose(rot_rf).dot(trajectory[9:12, i] - trajectory[0:3, i]),
-                                             np.transpose(rot_rf).dot(trajectory[12:15, i] - trajectory[0:3, i]),
-                                             rot2euler(rot_mul),
-                                             trajectory[21:m + 1, i]
-                                             ))
+        r_trajectory[:, [i]] = np.block([[np.transpose(rot_rf).dot(trajectory[3:6, [i]] - trajectory[0:3, [i]])],
+                                        [np.transpose(rot_rf).dot(trajectory[6:9, [i]] - trajectory[0:3, [i]])],
+                                        [np.transpose(rot_rf).dot(trajectory[9:12, [i]] - trajectory[0:3, [i]])],
+                                        [np.transpose(rot_rf).dot(trajectory[12:15, [i]] - trajectory[0:3, [i]])],
+                                        [rot2euler(rot_mul).reshape((3,1))]])
     return r_trajectory

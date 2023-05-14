@@ -1,6 +1,6 @@
 #def LoadGaitParameters():
 
-NumberOfTimeInstances = 1800
+NumberOfTimeInstances = 1200
 TimeInterval = 10  # time interval in between simulation time intervals [ms]
 #StepPelvisHeight = 170+28 # default 0.237 [mm]
 

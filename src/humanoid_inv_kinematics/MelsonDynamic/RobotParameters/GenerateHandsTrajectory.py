@@ -1,12 +1,11 @@
 import numpy
-
-import GaitParameters as GP
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.GaitStepPlanner as GSP
+import src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.GaitParameters as GP
 import numpy as np
 from src.humanoid_inv_kinematics.MelsonDynamic.ConvertToRF import rot2euler
-from Kinematics import rotZ
+from src.humanoid_inv_kinematics.MelsonDynamic.RobotParameters.Kinematics import rotZ
 import src.humanoid_inv_kinematics.MelsonDynamic.ZMP_Generation.solveCoM as SCoM
 for TimeIter in range(GP.NumberOfTimeInstances):
-
     r_center = (SCoM.GSP.con.GaitEndPointsTrajectory.r_RF[:, TimeIter-1] + SCoM.GSP.con.GaitEndPointsTrajectory.r_LF[:, TimeIter-1]) / 2
     r_center[2] = 0
 
@@ -20,7 +19,7 @@ for TimeIter in range(GP.NumberOfTimeInstances):
 
     rot = rotZ(angleZ)
 
-    r_CoM_2d = SCoM.GSP.con.GaitCoMTrajectory[:, TimeIter-1]
+    r_CoM_2d = SCoM.GSP.con.GaitEndPointsTrajectory.r_W[:, TimeIter-1].copy()
     r_CoM_2d[2] = 0
 
     r_center_CoM = (r_CoM_2d - r_center)
@@ -34,3 +33,5 @@ for TimeIter in range(GP.NumberOfTimeInstances):
 
     SCoM.GSP.con.GaitEndPointsTrajectory.r_RH[:, [TimeIter-1]] = np.transpose(r_RH)
     SCoM.GSP.con.GaitEndPointsTrajectory.r_LH[:, [TimeIter-1]] = np.transpose(r_LH)
+GSP.plotResults(SCoM.GSP.con.GaitEndPointsTrajectory.r_RH, "Right Hand")
+GSP.plotResults(SCoM.GSP.con.GaitEndPointsTrajectory.r_LH, "Left Hand")
