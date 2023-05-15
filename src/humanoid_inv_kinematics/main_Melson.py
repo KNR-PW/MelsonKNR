@@ -33,14 +33,18 @@ Test_Trajectory = np.zeros((GP.NumberOfTimeInstances, 15))
 Gait_JointAngles = np.zeros((GP.NumberOfTimeInstances, 19))
 q_0 = q0
 Gait_JointAngles[0][:] = np.transpose(q_0)
-for i in range(1000):
+for i in range(5000):
     Gait_JointAngles[[0], :] = np.transpose(
         CLIK(np.transpose(Gait_JointAngles[[0], :]), trajectory_0[:, [0]], trajectory_RF[:, [0]]))
 Test_Trajectory[[0], :] = np.transpose(k_for(np.transpose(Gait_JointAngles[[0], :]),trajectory_0[:, [0]]))
 for i in range(1, GP.NumberOfTimeInstances):
     Gait_JointAngles[[i], :] = np.transpose(CLIK(np.transpose(Gait_JointAngles[[i-1], :]), trajectory_0[:, [i]], trajectory_RF[:, [i]]))
     Test_Trajectory[[i], :] = np.transpose(k_for(np.transpose(Gait_JointAngles[[i], :]),trajectory_0[:, [i]]))
-plt.plot(range(GP.NumberOfTimeInstances),Gait_JointAngles[:, [0]] )
+plt.plot(range(GP.NumberOfTimeInstances),Gait_JointAngles[:, [0]])
+plt.show()
+plt.plot(range(GP.NumberOfTimeInstances),Test_Trajectory[:, [0]])
+plt.show()
+plt.plot(range(GP.NumberOfTimeInstances),np.transpose(trajectory_RF[[0], :]))
 plt.show()
 Robot_JointAngles = np.zeros((GP.NumberOfTimeInstances, 19))
 

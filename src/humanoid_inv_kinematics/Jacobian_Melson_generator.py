@@ -33,7 +33,7 @@ def inv_rot(R):
 # TODO umiescic link do pdf'a
 
 
-def Jacobian_Melson(q,trajectory_vector):
+def Jacobian_Melson(q, forward_kinematics_trajectory, trajectory_vector_0):
     RTz = q[0]; RTx = q[1]; RTy = q[2]; RSy = q[3]; RFy = q[4]; RFx = q[5]; LTz = q[6]; LTx = q[7]; LTy = q[8]; LSy = q[9]
     LFy = q[10]; LFx = q[11]; RAy = q[12]; RAx = q[13]; RFAy = q[14]; LAy = q[15]; LAx = q[16]; LFAy = q[17]; CHz = q[18]
 
@@ -61,7 +61,7 @@ def Jacobian_Melson(q,trajectory_vector):
                        [1, 0, 0],
                        [0, 0, 0]])
 
-    R_0_RF = con.euler2rot(trajectory_vector[15:18])
+    R_0_RF = con.euler2rot(trajectory_vector_0[15:18])
     R_W_RF = R_W_RT @ R_RT_RS @ R_RS_RF
     R_RF_W = inv_rot(R_W_RF)
     R_0_W = R_0_RF @ R_RF_W
@@ -76,12 +76,16 @@ def Jacobian_Melson(q,trajectory_vector):
     R_RF_RT = R_RF_W @ R_W_RT
     R_RF_RS = R_RF_RT @ R_RT_RS
 
-    e1 = trajectory_vector[15]
-    e2 = trajectory_vector[16]
+    e1 = forward_kinematics_trajectory[12]
+    e2 = forward_kinematics_trajectory[13]
+    e3 = forward_kinematics_trajectory[14]
 
     E = np.array([[math.cos(e1)*math.sin(e2)/math.cos(e2),math.sin(e2)*math.sin(e1)/math.cos(e2),1],
-                  [-math.sin(e1), math.cos(e1), 0],
-                  [math.cos(e1)/math.cos(e2), math.sin(e1)/math.cos(e2), 0]])
+                 [-math.sin(e1), math.cos(e1), 0],
+                 [math.cos(e1)/math.cos(e2), math.sin(e1)/math.cos(e2), 0]])
+    #E = 1/math.cos(e2)* np.array([[0, math.sin(e3) , math.cos(e3)],
+                   #[0, math.cos(e2)*math.cos(e3), -math.sin(e3)*math.cos(e2)],
+                   #[math.cos(e2), math.sin(e3)*math.sin(e2),  math.cos(e3)*math.sin(e2)]])
 
     T = np.block([[np.eye(12), np.zeros((12, 3))],
                   [np.zeros((3, 12)), E]])

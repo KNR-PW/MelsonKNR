@@ -24,23 +24,22 @@ q_max = np.array([15, 15, 0, 90, 90, 30, 15, 15, 0, 90, 90, 30, 90, 0, 0, 90, 90
 q_min = np.array([-15, -15, -90, 0, -90, -30, -15, -15, -90, 0, -90, -30, -90, -90, -90, -90, 0, -90, -15]) * math.pi/180.0
 q_mid = (q_max+q_min)/2.0
 k = 1;
-dt = gp.TimeInterval*10**(-3)
 n = 19
 
 # Główna funkcja:
 def CLIK(q_i,x_i_w, x_i):
 
     kq_i = k_for(q_i, x_i_w)
-    v_i = (x_i - kq_i)/20
+    v_i = (x_i - kq_i)/100
     #print(f"norm =  {np.linalg.norm(x_i - kq_i)}")
     # print(f"x =  {x_i}")
-    # print(f"v =  {v_i}")
-    J_i = np.array(J_M(q_i, x_i_w), dtype=np.float)
+    #print(f"v =  {v_i}")
+    J_i = np.array(J_M(q_i, kq_i, x_i_w), dtype=np.float)
     # J_p_i = np.linalg.pinv(J_i)
     J_p_i = np.transpose(J_i) @ np.linalg.inv(J_i @ np.transpose(J_i))
     dq0 = np.zeros((n, 1))
     for j in range(n):
-        dq0[j] = -k * (q_i[j] - q_mid[j]) / (q_max[j]- q_min[j])
+        dq0[j] = -k * (q_i[j] - q_mid[j]) / (q_max[j] - q_min[j])
 
     dq_i = np.dot(J_p_i, v_i) + (np.eye(n) - J_p_i @ J_i) @ dq0
     # print(f"dq =  {dq_i}")
