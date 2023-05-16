@@ -25,18 +25,18 @@ q_min = np.array([-15, -15, -90, 0, -90, -30, -15, -15, -90, 0, -90, -30, -90, -
 q_mid = (q_max+q_min)/2.0
 k = 1;
 n = 19
-
+damping_constant = 10;
 # Główna funkcja:
 def CLIK(q_i,x_i_w, x_i):
 
     kq_i = k_for(q_i, x_i_w)
-    v_i = (x_i - kq_i)/100
+    v_i = (x_i - kq_i)
     #print(f"norm =  {np.linalg.norm(x_i - kq_i)}")
     # print(f"x =  {x_i}")
     #print(f"v =  {v_i}")
     J_i = np.array(J_M(q_i, kq_i, x_i_w), dtype=np.float)
     # J_p_i = np.linalg.pinv(J_i)
-    J_p_i = np.transpose(J_i) @ np.linalg.inv(J_i @ np.transpose(J_i))
+    J_p_i = np.array(np.transpose(J_i) @ np.linalg.inv(J_i @ np.transpose(J_i)+damping_constant**2*np.eye(15)),dtype = np.float)
     dq0 = np.zeros((n, 1))
     for j in range(n):
         dq0[j] = -k * (q_i[j] - q_mid[j]) / (q_max[j] - q_min[j])

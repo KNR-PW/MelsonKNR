@@ -1,12 +1,12 @@
 #def LoadGaitParameters():
 
-NumberOfTimeInstances = 1200
+NumberOfTimeInstances = 2200
 TimeInterval = 10  # time interval in between simulation time intervals [ms]
 #StepPelvisHeight = 170+28 # default 0.237 [mm]
 
 StepPelvisHeight = 190
-NumOfStepsLeftLeg = 3
-NumOfStepsRightLeg = 4
+NumOfStepsLeftLeg = 5
+NumOfStepsRightLeg = 6
 # StepHeight = 20+28 # [mm] TODO komentarz do testów z matlabem
 StepHeight = 75
 # Gait cycle percentage participation, sum must equal 1
