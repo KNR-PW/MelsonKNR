@@ -32,20 +32,18 @@ Code is divided into 3 sections:
 There are also few subscripts\functions that are used for elements below, that are self-explanatory.
 
 ### Trajectory generation (can be used for both robots)
- - 'GaitParameters.py' - parameters for walking in straight line
- -  'GaitStepPlanner.py' - script that generates feet trajectories 
- -  'solveCom.py' - script that generates trajectory for robot's center of mass (CoM) from feet trajectory
- -  'GenerateHandsTrajectory.py' - script that generates hands trajectory from feet and CoM trajectories
+ - `GaitParameters.py` - parameters for walking in straight line
+ -  `GaitStepPlanner.py` - script that generates feet trajectories 
+ -  `solveCom.py` - script that generates trajectory for robot's center of mass (CoM) from feet trajectory
+ -  `GenerateHandsTrajectory.py` - script that generates hands trajectory from feet and CoM trajectories
 
 ### Inverse Kinematics (where 'X' represents Melson or Melman)
-- 'Jacobian_X_generator - function that generates Jacobian matrix based on robot's current internal state
-- 'Forward_kinematics_X' - function that generates forward kinematics vector based on robot's current internal state
-- 'CLIK_X.py' - function that solves one iteration of redundant inverse kinematics problem using damped pseudoinverse Jacobian method
-- 'main_X.py' - script that is currently used to generate internal state for every time step for straight walking. 
+- `Jacobian_X_generator.py` - function that generates Jacobian matrix based on robot's current internal state
+- `Forward_kinematics_X.py` - function that generates forward kinematics vector based on robot's current internal state
+- `CLIK_X.py` - function that solves one iteration of redundant inverse kinematics problem using damped pseudoinverse Jacobian method
+- `main_X.py` - script that is currently used to generate internal state for every time step for straight walking. 
 
 ### Robots parameters (where 'X' represents Melson or Melman)
-- 'X_parameters.py' - script that holds information about physical state of a robot properties (mass, dimensions etc.)
+- `X_parameters.py` - script that holds information about physical state of a robot properties (mass, dimensions etc.)
 
-
- 
  
