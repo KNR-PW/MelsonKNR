@@ -103,5 +103,5 @@ def Forward_kinematics_Melson(q, trajectory_vector):
 
     x =np.concatenate((r_RF_LF.reshape((3,1)), r_RF_RH.reshape((3,1)), r_RF_LH.reshape((3,1)), r_RF_CoM.reshape((3,1)), gamma_RF_LF.reshape((3,1))))
     return x
-#q = np.ones((18,1))
-#print(Forward_kinematics_Melman(q, np.zeros((21,1))))
+#q = np.zeros((19,1))
+#print(Forward_kinematics_Melson(q, np.zeros((21,1))))

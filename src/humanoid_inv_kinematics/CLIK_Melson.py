@@ -25,7 +25,7 @@ q_min = np.array([-15, -15, -90, 0, -90, -30, -15, -15, -90, 0, -90, -30, -90, -
 q_mid = (q_max+q_min)/2.0
 k = 1;
 n = 19
-damping_constant = 10;
+damping_constant = 0;
 # Główna funkcja:
 def CLIK(q_i,x_i_w, x_i):
 

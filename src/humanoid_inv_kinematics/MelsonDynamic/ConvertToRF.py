@@ -8,10 +8,16 @@ def euler2rot(e):
 
 
 # transformacja z macierzy rotacji do macierzy eulera
+# def rot2euler(rot):
+#     b = np.arctan2([-rot[0, 2]], [math.sqrt(rot[0, 0] ** 2 + rot[0, 1] ** 2)])
+#     a = np.arctan2([rot[0, 1]], [rot[0, 0]])
+#     c = np.arctan2([rot[1, 2]], [rot[2, 2]])
+#     return np.concatenate([a, b, c])
 def rot2euler(rot):
-    b = np.arctan2([-rot[0, 2]], [math.sqrt(rot[0, 0] ** 2 + rot[0, 1] ** 2)])
-    a = np.arctan2([rot[0, 1]], [rot[0, 0]])
-    c = np.arctan2([rot[1, 2]], [rot[2, 2]])
+    b = np.arctan2([-rot[2, 0]], [math.sqrt(rot[0, 0] ** 2 + rot[0, 1] ** 2)])
+    #b = -np.arcsin([rot[2, 0]])
+    a = np.arctan2([rot[1, 0]], [rot[0, 0]])
+    c = np.arctan2([rot[2, 1]], [rot[2, 2]])
     return np.concatenate([a, b, c])
 
 
